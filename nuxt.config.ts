@@ -8,9 +8,7 @@ export default defineNuxtConfig({
   modules: ['@vueuse/nuxt', '@nuxt/eslint'],
 
   components: {
-    dirs: [
-      { path: '~/components', pathPrefix: false },
-    ],
+    dirs: [{ path: '~/components', pathPrefix: false }],
   },
 
   typescript: {

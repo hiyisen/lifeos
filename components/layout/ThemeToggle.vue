@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Sun, Moon, Monitor } from 'lucide-vue-next';
+import { Sun, Moon, Monitor, ChevronDown } from 'lucide-vue-next';
 
 const { theme, setTheme } = useTheme();
 
@@ -11,20 +11,50 @@ const modes: { value: 'light' | 'dark' | 'system'; icon: typeof Sun; label: stri
 
 const currentMode = computed(() => modes.find((m) => m.value === theme.value) ?? modes[2]);
 
-function cycle() {
-  const idx = modes.findIndex((m) => m.value === theme.value);
-  const next = modes[(idx + 1) % modes.length];
-  setTheme(next.value);
+const open = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
+
+onClickOutside(dropdownRef, () => {
+  open.value = false;
+});
+
+function select(value: 'light' | 'dark' | 'system') {
+  setTheme(value);
+  open.value = false;
 }
 </script>
 
 <template>
-  <button
-    class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg)] hover:text-[var(--color-text)]"
-    :title="modes.find((m) => m.value === theme)?.label"
-    @click="cycle"
-  >
-    <component :is="currentMode.icon" class="h-5 w-5" />
-    <span>{{ currentMode.label }}</span>
-  </button>
+  <div ref="dropdownRef" class="relative">
+    <button
+      class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg)] hover:text-[var(--color-text)]"
+      @click="open = !open"
+    >
+      <component :is="currentMode.icon" class="h-5 w-5" />
+      <span class="flex-1 text-left">{{ currentMode.label }}</span>
+      <ChevronDown class="h-3.5 w-3.5 transition-transform" :class="{ 'rotate-180': open }" />
+    </button>
+
+    <Transition name="dropdown">
+      <div
+        v-if="open"
+        class="absolute bottom-full left-0 z-50 mb-1 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-lg"
+      >
+        <button
+          v-for="mode in modes"
+          :key="mode.value"
+          class="flex w-full items-center gap-3 rounded px-3 py-2 text-sm transition-colors hover:bg-[var(--color-bg)]"
+          :class="
+            theme === mode.value
+              ? 'text-primary-600 dark:text-primary-400'
+              : 'text-[var(--color-text)]'
+          "
+          @click="select(mode.value)"
+        >
+          <component :is="mode.icon" class="h-4 w-4" />
+          {{ mode.label }}
+        </button>
+      </div>
+    </Transition>
+  </div>
 </template>

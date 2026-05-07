@@ -64,7 +64,6 @@ function initChart() {
 onUnmounted(() => {
   chart?.dispose();
 });
-
 </script>
 
 <template>
