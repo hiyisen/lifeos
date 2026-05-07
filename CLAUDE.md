@@ -42,36 +42,36 @@ npm run check        # Full check: lint + format + typecheck
 
 ### 开发高频
 
-| Skill | When to Use |
-|-------|-------------|
-| `frontend-design` | Building any UI page or component — creates distinctive, production-grade design that avoids generic AI aesthetics |
-| `simplify` | After completing a code change — review for reuse, quality, efficiency |
-| `git-smart-commit` | When user says "commit" / "提交" — analyze changes, generate conventional commit, stage & commit |
-| `webapp-testing` | Verify UI functionality with Playwright — test pages, capture screenshots, debug browser behavior |
+| Skill              | When to Use                                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `frontend-design`  | Building any UI page or component — creates distinctive, production-grade design that avoids generic AI aesthetics |
+| `simplify`         | After completing a code change — review for reuse, quality, efficiency                                             |
+| `git-smart-commit` | When user says "commit" / "提交" — analyze changes, generate conventional commit, stage & commit                   |
+| `webapp-testing`   | Verify UI functionality with Playwright — test pages, capture screenshots, debug browser behavior                  |
 
 ### 场景化使用
 
-| Skill | When to Use |
-|-------|-------------|
-| `humanizer-zh` | Writing or polishing Chinese UI text (labels, placeholders, empty states) |
-| `theme-factory` | Enrich LifeOS light/dark themes — provides 10 pre-set color/font themes |
-| `xlsx` | Data export to Excel/CSV format, reading/creating spreadsheets |
-| `security-review` | Before deployment, after adding sensitive data handling |
+| Skill             | When to Use                                                               |
+| ----------------- | ------------------------------------------------------------------------- |
+| `humanizer-zh`    | Writing or polishing Chinese UI text (labels, placeholders, empty states) |
+| `theme-factory`   | Enrich LifeOS light/dark themes — provides 10 pre-set color/font themes   |
+| `xlsx`            | Data export to Excel/CSV format, reading/creating spreadsheets            |
+| `security-review` | Before deployment, after adding sensitive data handling                   |
 
 ### 工具类
 
-| Skill | When to Use |
-|-------|-------------|
-| `fewer-permission-prompts` | When permission prompts become repetitive during development |
-| `skill-creator` | Improving the `git-smart-commit` custom skill |
-| `canvas-design` | Creating app icons, empty-state illustrations, static visuals |
-| `update-config` | Configuring project-level permissions or hooks in `.claude/settings.json` |
-| `init` | Regenerating this file when project structure changes significantly |
+| Skill                      | When to Use                                                               |
+| -------------------------- | ------------------------------------------------------------------------- |
+| `fewer-permission-prompts` | When permission prompts become repetitive during development              |
+| `skill-creator`            | Improving the `git-smart-commit` custom skill                             |
+| `canvas-design`            | Creating app icons, empty-state illustrations, static visuals             |
+| `update-config`            | Configuring project-level permissions or hooks in `.claude/settings.json` |
+| `init`                     | Regenerating this file when project structure changes significantly       |
 
 ## Available MCPs
 
-| MCP | Use |
-|-----|-----|
+| MCP              | Use                                                                       |
+| ---------------- | ------------------------------------------------------------------------- |
 | `mcp__notion__*` | Optional: sync data to Notion for backup, or import from Notion databases |
 
 ## File Structure (conceptual)
@@ -88,14 +88,14 @@ data/           → lifeos.db + photos/ (git ignored)
 
 ## Module Table Reference
 
-| Module | Table | API Prefix | External Search |
-|--------|-------|-----------|-----------------|
-| Food | `foods` | `/api/foods` | — |
-| Media | `media` | `/api/media` | TMDB |
-| Games | `games` | `/api/games` | IGDB |
-| Books | `books` | `/api/books` | OpenLibrary |
-| Expenses | `expenses` | `/api/expenses` | — |
-| Tasks | `tasks` | `/api/tasks` | — |
-| Dicts | `dict_categories`, `dict_items` | `/api/dict` | — |
-| Stats | (aggregated) | `/api/stats` | — |
-| Export | (all) | `/api/export` | — |
+| Module   | Table                           | API Prefix      | External Search |
+| -------- | ------------------------------- | --------------- | --------------- |
+| Food     | `foods`                         | `/api/foods`    | —               |
+| Media    | `media`                         | `/api/media`    | TMDB            |
+| Games    | `games`                         | `/api/games`    | IGDB            |
+| Books    | `books`                         | `/api/books`    | OpenLibrary     |
+| Expenses | `expenses`                      | `/api/expenses` | —               |
+| Tasks    | `tasks`                         | `/api/tasks`    | —               |
+| Dicts    | `dict_categories`, `dict_items` | `/api/dict`     | —               |
+| Stats    | (aggregated)                    | `/api/stats`    | —               |
+| Export   | (all)                           | `/api/export`   | —               |

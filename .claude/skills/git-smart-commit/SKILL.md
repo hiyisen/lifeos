@@ -49,39 +49,41 @@ git log --oneline -10
 
 **type 类型识别规则**：
 
-| type | 识别条件 |
-|------|---------|
-| `feat` | 新增页面、组件、API、功能逻辑 |
-| `fix` | 修复 bug、类型错误、运行时错误 |
+| type       | 识别条件                             |
+| ---------- | ------------------------------------ |
+| `feat`     | 新增页面、组件、API、功能逻辑        |
+| `fix`      | 修复 bug、类型错误、运行时错误       |
 | `refactor` | 重命名、提取函数、调整结构但行为不变 |
-| `style` | 仅 CSS/Tailwind 样式修改、格式化 |
-| `docs` | 仅 .md 文档修改 |
-| `chore` | 配置文件、依赖、.gitignore、构建脚本 |
-| `perf` | 性能优化、减少渲染 |
-| `test` | 测试文件 |
+| `style`    | 仅 CSS/Tailwind 样式修改、格式化     |
+| `docs`     | 仅 .md 文档修改                      |
+| `chore`    | 配置文件、依赖、.gitignore、构建脚本 |
+| `perf`     | 性能优化、减少渲染                   |
+| `test`     | 测试文件                             |
 
 **scope 自动推断规则**：
 
-| scope | 文件路径匹配 |
-|-------|-------------|
-| `foods` | `pages/foods/`, `server/api/foods/`, `components/foods/` |
-| `media` | `pages/media/`, `server/api/media/`, `components/media/` |
-| `games` | `pages/games/`, `server/api/games/`, `components/games/` |
-| `books` | `pages/books/`, `server/api/books/`, `components/books/` |
+| scope      | 文件路径匹配                                                      |
+| ---------- | ----------------------------------------------------------------- |
+| `foods`    | `pages/foods/`, `server/api/foods/`, `components/foods/`          |
+| `media`    | `pages/media/`, `server/api/media/`, `components/media/`          |
+| `games`    | `pages/games/`, `server/api/games/`, `components/games/`          |
+| `books`    | `pages/books/`, `server/api/books/`, `components/books/`          |
 | `expenses` | `pages/expenses/`, `server/api/expenses/`, `components/expenses/` |
-| `tasks` | `pages/tasks/`, `server/api/tasks/`, `components/tasks/` |
-| `stats` | `pages/stats/`, `server/api/stats/`, `components/dashboard/` |
-| `dict` | `server/api/dict/`, 字典相关 |
-| `layout` | `components/layout/`, `app.vue`, `layouts/` |
-| `common` | `components/common/`, `composables/` |
-| `config` | `nuxt.config.ts`, `tailwind.config.ts`, `package.json`, `.env` |
+| `tasks`    | `pages/tasks/`, `server/api/tasks/`, `components/tasks/`          |
+| `stats`    | `pages/stats/`, `server/api/stats/`, `components/dashboard/`      |
+| `dict`     | `server/api/dict/`, 字典相关                                      |
+| `layout`   | `components/layout/`, `app.vue`, `layouts/`                       |
+| `common`   | `components/common/`, `composables/`                              |
+| `config`   | `nuxt.config.ts`, `tailwind.config.ts`, `package.json`, `.env`    |
 
 **subject 规则**：
+
 - 中文描述，≤ 50 字符
 - 不加句号
 - 说清楚做了什么，不描述代码
 
 **body 规则**（可选，复杂变更时添加）：
+
 - 列出 2-5 条关键变更点
 - 每条一行，`- ` 开头
 
@@ -128,6 +130,7 @@ EOF
 ### 场景 A：已有暂存文件 + 未暂存文件
 
 分开显示，询问：
+
 - "当前有 3 个已暂存文件和 2 个未暂存文件。是否一起提交？"
 
 ### 场景 B：工作区干净
