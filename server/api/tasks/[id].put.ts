@@ -2,7 +2,22 @@ import { getDb } from '../../utils/db';
 
 export default defineEventHandler(async (event) => {
   const id = Number(getRouterParam(event, 'id'));
-  const body = await readBody(event);
+  const body = await readBody<{
+    title?: string;
+    description?: string;
+    priority?: string;
+    status?: string;
+    category?: string;
+    due_date?: string;
+    is_recurring?: boolean;
+    recur_type?: string;
+    linked_module?: string;
+    linked_id?: number;
+    completed_at?: string;
+  }>(event);
+
+  if (!body.title) throw createError({ statusCode: 400, message: 'title is required' });
+
   const db = getDb();
 
   if (!db.get('SELECT id FROM tasks WHERE id = ?', id)) {

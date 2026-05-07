@@ -29,7 +29,7 @@ export default defineEventHandler((event) => {
     ...params,
   ) ?? { total: 0 };
   sql +=
-    ' ORDER BY CASE priority WHEN "high" THEN 1 WHEN "medium" THEN 2 WHEN "low" THEN 3 END, due_date ASC, created_at DESC';
+    " ORDER BY CASE priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END, due_date ASC, created_at DESC";
 
   return { success: true, data: db.all(sql, ...params), meta: { total, page: 1, pageSize: total } };
 });

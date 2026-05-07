@@ -8,8 +8,7 @@ const emit = defineEmits<{
   edit: [id: number];
 }>();
 
-const { getLabel, loaded, load } = useDict();
-if (!loaded.value) load();
+const { getLabel } = useDict();
 
 const priorityColors: Record<string, string> = {
   high: '#ef4444',
@@ -17,11 +16,9 @@ const priorityColors: Record<string, string> = {
   low: '#22c55e',
 };
 
-async function cycleStatus(task: Record<string, any>) {
+function cycleStatus(task: Record<string, any>) {
   const next =
     task.status === 'todo' ? 'in_progress' : task.status === 'in_progress' ? 'done' : 'todo';
-  const api = useApi();
-  await api.patch(`/api/tasks/${task.id}/status`, { status: next });
   emit('update:status', task.id, next);
 }
 </script>
@@ -31,12 +28,12 @@ async function cycleStatus(task: Record<string, any>) {
     class="flex items-start gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3 transition-all hover:shadow-sm"
     :class="{ 'opacity-60': task.status === 'done' }"
   >
-    <button class="mt-0.5 flex-shrink-0" @click="cycleStatus(task)">
+    <button class="mt-0.5 flex-shrink-0" type="button" @click="cycleStatus(task)">
       <CheckCircle2 v-if="task.status === 'done'" class="h-5 w-5 text-green-500" />
       <Play v-else-if="task.status === 'in_progress'" class="h-5 w-5 text-blue-500" />
       <Circle v-else class="h-5 w-5 text-[var(--color-border)]" />
     </button>
-    <div class="min-w-0 flex-1" @click="$emit('edit', task.id)">
+    <div class="min-w-0 flex-1">
       <p
         class="line-clamp-1 font-medium text-[var(--color-text)]"
         :class="{ 'line-through': task.status === 'done' }"
@@ -62,6 +59,7 @@ async function cycleStatus(task: Record<string, any>) {
       </div>
     </div>
     <button
+      type="button"
       class="flex-shrink-0 rounded p-1 text-[var(--color-text-secondary)] hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950"
       @click="$emit('delete', task.id)"
     >

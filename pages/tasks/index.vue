@@ -7,6 +7,7 @@ const loading = ref(true);
 const showAddForm = ref(false);
 const addForm = reactive({ title: '', priority: 'medium' as string, category: '', due_date: '' });
 const saving = ref(false);
+const error = ref('');
 
 async function fetch() {
   loading.value = true;
@@ -15,17 +16,23 @@ async function fetch() {
   loading.value = false;
 }
 
-const kanbanTasks = computed(() => tasks.value);
-
 async function onStatusUpdate(id: number, status: string) {
-  await api.patch(`/api/tasks/${id}/status`, { status });
-  const t = tasks.value.find((x) => x.id === id);
-  if (t) t.status = status;
+  try {
+    await api.patch(`/api/tasks/${id}/status`, { status });
+    const t = tasks.value.find((x) => x.id === id);
+    if (t) t.status = status;
+  } catch {
+    error.value = '操作失败，请重试';
+  }
 }
 
 async function onDelete(id: number) {
-  await api.del(`/api/tasks/${id}`);
-  tasks.value = tasks.value.filter((t) => t.id !== id);
+  try {
+    await api.del(`/api/tasks/${id}`);
+    tasks.value = tasks.value.filter((t) => t.id !== id);
+  } catch {
+    error.value = '删除失败，请重试';
+  }
 }
 
 async function onAdd() {
@@ -59,6 +66,14 @@ onMounted(async () => {
 
 <template>
   <div>
+    <div
+      v-if="error"
+      class="mb-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400"
+    >
+      {{ error }}
+      <button class="ml-2 underline" @click="error = ''">关闭</button>
+    </div>
+
     <div v-if="loading" class="flex justify-center py-16">
       <div
         class="border-primary-600 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent"
@@ -68,7 +83,7 @@ onMounted(async () => {
     <!-- Quick add -->
     <div class="mb-6">
       <button
-        v-if="!showAddForm"
+        v-if="!showAddForm && !loading"
         class="hover:border-primary-400 hover:text-primary-600 inline-flex items-center gap-2 rounded-lg border border-dashed border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-text-secondary)]"
         @click="showAddForm = true"
       >
@@ -127,10 +142,9 @@ onMounted(async () => {
 
     <TaskKanban
       v-else
-      :tasks="kanbanTasks"
+      :tasks="tasks"
       @update:status="onStatusUpdate"
       @delete="onDelete"
-      @edit="(id: number) => navigateTo(`/tasks/${id}/edit`)"
       @add="showAddForm = true"
     />
   </div>
