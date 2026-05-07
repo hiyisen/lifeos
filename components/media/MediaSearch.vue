@@ -33,6 +33,7 @@ function getPoster(item: any) {
       <button
         v-for="item in results"
         :key="item.id"
+        type="button"
         class="hover:border-primary-400 flex w-full items-center gap-3 rounded-xl border border-[var(--color-border)] p-2 text-left transition-colors hover:bg-[var(--color-bg)]"
         @click="
           emit('select', {

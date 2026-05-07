@@ -113,6 +113,7 @@ function onDrop(e: DragEvent) {
           loading="lazy"
         />
         <button
+          type="button"
           class="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
           @click.stop="remove(index)"
         >

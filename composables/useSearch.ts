@@ -1,4 +1,5 @@
 export function useSearch(source: 'media' | 'books' | 'games') {
+  const api = useApi();
   const query = ref('');
   const results = ref<any[]>([]);
   const loading = ref(false);
@@ -11,7 +12,6 @@ export function useSearch(source: 'media' | 'books' | 'games') {
     }
     loading.value = true;
     try {
-      const api = useApi();
       const res = await api.get<any[]>(`/api/search/${source}`, { q });
       if (res.success) results.value = res.data;
     } finally {
