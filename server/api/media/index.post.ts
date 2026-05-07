@@ -1,0 +1,43 @@
+import { getDb } from '../../utils/db';
+
+export default defineEventHandler(async (event) => {
+  const body = await readBody<{
+    title: string;
+    type: string;
+    year?: number;
+    director?: string;
+    rating?: number;
+    review?: string;
+    poster_path?: string;
+    source_id?: string;
+    source_url?: string;
+    status?: string;
+    current_season?: number;
+    current_episode?: number;
+    total_episodes?: number;
+  }>(event);
+
+  if (!body.title || !body.type)
+    throw createError({ statusCode: 400, message: 'title and type are required' });
+
+  const db = getDb();
+  const result = db.run(
+    `INSERT INTO media (title, type, year, director, rating, review, poster_path, source_id, source_url, status, current_season, current_episode, total_episodes)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    body.title,
+    body.type,
+    body.year || null,
+    body.director || null,
+    body.rating || null,
+    body.review || null,
+    body.poster_path || null,
+    body.source_id || null,
+    body.source_url || null,
+    body.status || 'wishlist',
+    body.current_season || 1,
+    body.current_episode || 0,
+    body.total_episodes || null,
+  );
+  const media = db.get('SELECT * FROM media WHERE id = ?', result.lastInsertRowid);
+  return { success: true, data: media };
+});
