@@ -12,6 +12,8 @@
       "Bash(rm *)",
       "Bash(cat *)",
       "Bash(curl *)",
+      "Bash(python *)",
+      "Bash(playwright *)",
       "Bash(pm2 *)",
       "Bash(systemctl *)",
       "Bash(git *)",
@@ -41,13 +43,19 @@
     ]
   },
   "availableSkills": [
+    "frontend-design",
     "simplify",
-    "security-review",
+    "git-smart-commit",
+    "webapp-testing",
     "humanizer-zh",
+    "theme-factory",
+    "xlsx",
+    "security-review",
     "fewer-permission-prompts",
+    "skill-creator",
+    "canvas-design",
     "update-config",
-    "init",
-    "git-smart-commit"
+    "init"
   ],
   "availableMcps": [
     "notion"

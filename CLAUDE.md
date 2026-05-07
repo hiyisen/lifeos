@@ -40,15 +40,33 @@ npm run check        # Full check: lint + format + typecheck
 
 ## Available Skills
 
+### 开发高频
+
 | Skill | When to Use |
 |-------|-------------|
+| `frontend-design` | Building any UI page or component — creates distinctive, production-grade design that avoids generic AI aesthetics |
 | `simplify` | After completing a code change — review for reuse, quality, efficiency |
-| `security-review` | Before deployment, after adding auth/sensitive data handling |
-| `humanizer-zh` | When writing or polishing Chinese UI text (labels, placeholders, empty states) |
-| `fewer-permission-prompts` | When permission prompts become repetitive during development |
-| `update-config` | To configure project-level permissions or hooks in `.claude/settings.json` |
-| `init` | Already used — regenerates this file when project structure changes significantly |
 | `git-smart-commit` | When user says "commit" / "提交" — analyze changes, generate conventional commit, stage & commit |
+| `webapp-testing` | Verify UI functionality with Playwright — test pages, capture screenshots, debug browser behavior |
+
+### 场景化使用
+
+| Skill | When to Use |
+|-------|-------------|
+| `humanizer-zh` | Writing or polishing Chinese UI text (labels, placeholders, empty states) |
+| `theme-factory` | Enrich LifeOS light/dark themes — provides 10 pre-set color/font themes |
+| `xlsx` | Data export to Excel/CSV format, reading/creating spreadsheets |
+| `security-review` | Before deployment, after adding sensitive data handling |
+
+### 工具类
+
+| Skill | When to Use |
+|-------|-------------|
+| `fewer-permission-prompts` | When permission prompts become repetitive during development |
+| `skill-creator` | Improving the `git-smart-commit` custom skill |
+| `canvas-design` | Creating app icons, empty-state illustrations, static visuals |
+| `update-config` | Configuring project-level permissions or hooks in `.claude/settings.json` |
+| `init` | Regenerating this file when project structure changes significantly |
 
 ## Available MCPs
 
