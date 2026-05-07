@@ -1,0 +1,18 @@
+services:
+  lifeos:
+    build: .
+    container_name: lifeos
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+      - NUXT_DB_PATH=/app/data/lifeos.db
+      - NUXT_PHOTOS_DIR=/app/data/photos
+      - NUXT_PUBLIC_SITE_NAME=LifeOS
+      - TMDB_API_KEY=${TMDB_API_KEY:-}
+      - IGDB_CLIENT_ID=${IGDB_CLIENT_ID:-}
+      - IGDB_CLIENT_SECRET=${IGDB_CLIENT_SECRET:-}

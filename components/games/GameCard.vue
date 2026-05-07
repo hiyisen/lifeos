@@ -10,7 +10,9 @@ const { getLabel } = useDict();
     :to="`/games/${game.id}`"
     class="group flex gap-4 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3 transition-all hover:-translate-y-0.5 hover:shadow-lg"
   >
-    <div class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-[var(--color-bg)] sm:h-24 sm:w-24">
+    <div
+      class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-[var(--color-bg)] sm:h-24 sm:w-24"
+    >
       <img
         v-if="game.cover_path"
         :src="game.cover_path"

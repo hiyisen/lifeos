@@ -1,0 +1,14 @@
+node_modules/
+.nuxt/
+.output/
+dist/
+data/
+.git/
+.gitignore
+.env
+.env.local
+.env.production
+*.md
+.vscode/
+.claude/
+test-results/
