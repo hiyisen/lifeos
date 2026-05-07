@@ -54,7 +54,7 @@ const errors = reactive<{ name?: string; visited_at?: string }>({});
 function validate(): boolean {
   errors.name = undefined;
   errors.visited_at = undefined;
-  if (!form.name.trim()) errors.name = '请输入菜品名';
+  if (!form.name.trim()) errors.name = '请输入吃了什么';
   if (!form.visited_at) errors.visited_at = '请选择日期';
   return !errors.name && !errors.visited_at;
 }
@@ -79,12 +79,12 @@ function onSubmit() {
     <!-- Name (required) -->
     <div>
       <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">
-        菜品名 <span class="text-red-500">*</span>
+        吃了什么 <span class="text-red-500">*</span>
       </label>
       <input
         v-model="form.name"
         type="text"
-        placeholder="例如：麻婆豆腐"
+        placeholder="例如：肯德基全家桶、海底捞火锅、水晶街小吃"
         class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-1 focus:outline-none"
         :class="
           errors.name
@@ -97,13 +97,13 @@ function onSubmit() {
     </div>
 
     <!-- Restaurant + Cuisine -->
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
-        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">餐厅</label>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">地点/餐厅</label>
         <input
           v-model="form.restaurant"
           type="text"
-          placeholder="餐厅名"
+          placeholder="例如：肯德基、万达广场3楼"
           class="focus:border-primary-500 focus:ring-primary-500 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm focus:ring-1 focus:outline-none"
           style="background-color: var(--color-surface); color: var(--color-text)"
         />
@@ -115,6 +115,7 @@ function onSubmit() {
           category="cuisine_tag"
           placeholder="选择菜系"
           clearable
+          allow-custom
         />
       </div>
     </div>
@@ -132,7 +133,7 @@ function onSubmit() {
     </div>
 
     <!-- Rating + Price + Date -->
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">评分</label>
         <RatingStars v-model="form.rating" />

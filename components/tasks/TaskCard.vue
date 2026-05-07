@@ -8,6 +8,8 @@ const emit = defineEmits<{
   edit: [id: number];
 }>();
 
+const showDeleteConfirm = ref(false);
+
 const { getLabel } = useDict();
 
 const priorityColors: Record<string, string> = {
@@ -61,9 +63,20 @@ function cycleStatus(task: Record<string, any>) {
     <button
       type="button"
       class="flex-shrink-0 rounded p-1 text-[var(--color-text-secondary)] hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950"
-      @click="$emit('delete', task.id)"
+      @click="showDeleteConfirm = true"
     >
       <Trash2 class="h-4 w-4" />
     </button>
+    <ConfirmDialog
+      :open="showDeleteConfirm"
+      title="删除任务"
+      :message="`确定要删除「${task.title}」吗？此操作不可撤销。`"
+      variant="danger"
+      @confirm="
+        emit('delete', task.id);
+        showDeleteConfirm = false;
+      "
+      @cancel="showDeleteConfirm = false"
+    />
   </div>
 </template>

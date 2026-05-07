@@ -16,8 +16,16 @@ const form = reactive({
   year: props.initialData?.year ?? ('' as unknown as number),
 });
 
+const errors = reactive<{ title?: string }>({});
+
+function validate(): boolean {
+  errors.title = undefined;
+  if (!form.title.trim()) errors.title = '请输入游戏名';
+  return !errors.title;
+}
+
 function onSubmit() {
-  if (!form.title.trim()) return;
+  if (!validate()) return;
   emit('submit', {
     title: form.title.trim(),
     platform: form.platform,
@@ -40,11 +48,17 @@ function onSubmit() {
       <input
         v-model="form.title"
         type="text"
-        class="focus:border-primary-500 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm focus:outline-none"
+        class="w-full rounded-lg border px-3 py-2 text-sm focus:ring-1 focus:outline-none"
+        :class="
+          errors.title
+            ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+            : 'focus:border-primary-500 focus:ring-primary-500 border-[var(--color-border)]'
+        "
         style="background-color: var(--color-surface); color: var(--color-text)"
       />
+      <p v-if="errors.title" class="mt-1 text-xs text-red-500">{{ errors.title }}</p>
     </div>
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">平台</label
         ><DictSelect v-model="form.platform" category="platform" placeholder="选择平台" />
@@ -63,7 +77,7 @@ function onSubmit() {
         />
       </div>
     </div>
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">评分</label
         ><RatingStars v-model="form.rating" />

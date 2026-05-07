@@ -9,6 +9,9 @@ const emit = defineEmits<{
   add: [];
 }>();
 
+const isMobile = useMediaQuery('(max-width: 767px)');
+const currentTab = ref('todo');
+
 const columns = [
   { key: 'todo', label: '待办', color: '#f59e0b' },
   { key: 'in_progress', label: '进行中', color: '#3b82f6' },
@@ -37,53 +40,73 @@ function onDrop(e: DragEvent, status: string) {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-    <div
-      v-for="col in columns"
-      :key="col.key"
-      class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-3"
-      @dragover="onDragOver"
-      @drop="(e: DragEvent) => onDrop(e, col.key)"
-    >
-      <div class="mb-3 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="h-2.5 w-2.5 rounded-full" :style="{ backgroundColor: col.color }" />
-          <span class="text-sm font-semibold text-[var(--color-text)]">{{ col.label }}</span>
-          <span class="text-xs text-[var(--color-text-secondary)]"
-            >({{ getTasks(col.key).length }})</span
+  <div>
+    <!-- Mobile tab bar -->
+    <div v-if="isMobile" class="mb-3 flex gap-1 rounded-lg bg-[var(--color-bg)] p-1">
+      <button
+        v-for="col in columns"
+        :key="col.key"
+        class="flex-1 rounded-md px-3 py-2 text-xs font-medium transition-colors"
+        :class="
+          currentTab === col.key
+            ? 'bg-[var(--color-surface)] text-[var(--color-text)] shadow-sm'
+            : 'text-[var(--color-text-secondary)]'
+        "
+        @click="currentTab = col.key"
+      >
+        {{ col.label }} ({{ getTasks(col.key).length }})
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div
+        v-for="col in columns"
+        :key="col.key"
+        class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-3"
+        :class="{ hidden: isMobile && currentTab !== col.key }"
+        @dragover="onDragOver"
+        @drop="(e: DragEvent) => onDrop(e, col.key)"
+      >
+        <div class="mb-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="h-2.5 w-2.5 rounded-full" :style="{ backgroundColor: col.color }" />
+            <span class="text-sm font-semibold text-[var(--color-text)]">{{ col.label }}</span>
+            <span class="text-xs text-[var(--color-text-secondary)]"
+              >({{ getTasks(col.key).length }})</span
+            >
+          </div>
+          <button
+            v-if="col.key === 'todo'"
+            class="rounded-lg p-1 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)]"
+            @click="$emit('add')"
           >
-        </div>
-        <button
-          v-if="col.key === 'todo'"
-          class="rounded-lg p-1 text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)]"
-          @click="$emit('add')"
-        >
-          <Plus class="h-4 w-4" />
-        </button>
-      </div>
-
-      <div class="space-y-2">
-        <div
-          v-for="task in getTasks(col.key)"
-          :key="task.id"
-          draggable="true"
-          class="cursor-grab active:cursor-grabbing"
-          @dragstart="(e: DragEvent) => onDragStart(e, task.id)"
-        >
-          <TaskCard
-            :task="task"
-            compact
-            @update:status="(id: number, s: string) => $emit('update:status', id, s)"
-            @delete="(id: number) => $emit('delete', id)"
-            @edit="(id: number) => $emit('edit', id)"
-          />
+            <Plus class="h-4 w-4" />
+          </button>
         </div>
 
-        <div
-          v-if="getTasks(col.key).length === 0"
-          class="rounded-lg border border-dashed border-[var(--color-border)] py-8 text-center text-xs text-[var(--color-text-secondary)]"
-        >
-          拖拽任务到此处
+        <div class="space-y-2">
+          <div
+            v-for="task in getTasks(col.key)"
+            :key="task.id"
+            draggable="true"
+            class="cursor-grab active:cursor-grabbing"
+            @dragstart="(e: DragEvent) => onDragStart(e, task.id)"
+          >
+            <TaskCard
+              :task="task"
+              compact
+              @update:status="(id: number, s: string) => $emit('update:status', id, s)"
+              @delete="(id: number) => $emit('delete', id)"
+              @edit="(id: number) => $emit('edit', id)"
+            />
+          </div>
+
+          <div
+            v-if="getTasks(col.key).length === 0"
+            class="rounded-lg border border-dashed border-[var(--color-border)] py-8 text-center text-xs text-[var(--color-text-secondary)]"
+          >
+            拖拽任务到此处
+          </div>
         </div>
       </div>
     </div>

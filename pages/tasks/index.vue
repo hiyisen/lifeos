@@ -30,8 +30,9 @@ async function onDelete(id: number) {
   try {
     await api.del(`/api/tasks/${id}`);
     tasks.value = tasks.value.filter((t) => t.id !== id);
+    useToast().success('任务已删除');
   } catch {
-    error.value = '删除失败，请重试';
+    useToast().error('删除失败，请重试');
   }
 }
 

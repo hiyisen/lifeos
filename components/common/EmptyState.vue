@@ -6,6 +6,7 @@ defineProps<{
   description?: string;
   actionLabel?: string;
   icon?: Component;
+  filtered?: boolean;
 }>();
 
 defineEmits<{
@@ -21,8 +22,13 @@ defineEmits<{
     >
       <component :is="icon" class="h-8 w-8" />
     </div>
-    <h3 class="mb-1 text-lg font-semibold text-[var(--color-text)]">{{ title }}</h3>
-    <p v-if="description" class="mb-6 max-w-sm text-sm text-[var(--color-text-secondary)]">
+    <h3 class="mb-1 text-lg font-semibold text-[var(--color-text)]">
+      {{ filtered ? '没有找到匹配的结果' : title }}
+    </h3>
+    <p v-if="filtered" class="mb-6 max-w-sm text-sm text-[var(--color-text-secondary)]">
+      试试调整筛选条件
+    </p>
+    <p v-else-if="description" class="mb-6 max-w-sm text-sm text-[var(--color-text-secondary)]">
       {{ description }}
     </p>
     <button

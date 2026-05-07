@@ -31,8 +31,8 @@ export function useDict() {
         categories.value = res.data;
         loaded.value = true;
       }
-    } catch {
-      // retry on next call
+    } catch (e) {
+      console.warn('Failed to load dict:', e);
     } finally {
       loading.value = false;
     }

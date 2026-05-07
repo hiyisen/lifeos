@@ -25,7 +25,7 @@ async function exportData(format: 'json' | 'csv') {
       downloadBlob(blob as Blob, `${mod}-export.csv`);
     }
   } catch {
-    // handle error
+    useToast().error('导出失败，请重试');
   } finally {
     loading.value = false;
   }

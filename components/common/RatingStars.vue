@@ -19,9 +19,10 @@ const emit = defineEmits<{
 }>();
 
 const sizeMap = { sm: 'h-3.5 w-3.5', md: 'h-5 w-5', lg: 'h-6 w-6' };
+const hoverValue = ref(0);
 
 function getStarFill(starIndex: number): 'full' | 'half' | 'empty' {
-  const val = props.modelValue;
+  const val = hoverValue.value || props.modelValue;
   const threshold = starIndex * 2;
   if (val >= threshold) return 'full';
   if (val >= threshold - 1) return 'half';
@@ -35,7 +36,7 @@ function setRating(starIndex: number) {
 </script>
 
 <template>
-  <div class="inline-flex items-center gap-0.5 py-2">
+  <div class="relative inline-flex items-center gap-0.5 py-2">
     <button
       v-for="i in 5"
       :key="i"
@@ -47,6 +48,8 @@ function setRating(starIndex: number) {
         props.readonly ? 'cursor-default' : 'cursor-pointer hover:scale-110',
       ]"
       @click="setRating(i)"
+      @mouseenter="!props.readonly && (hoverValue = i * 2)"
+      @mouseleave="hoverValue = 0"
     >
       <!-- Empty star -->
       <Star
@@ -67,8 +70,15 @@ function setRating(starIndex: number) {
         <Star :class="sizeMap[size]" :stroke-width="1.5" fill="#f59e0b" stroke="#f59e0b" />
       </div>
     </button>
+    <!-- Tooltip / score display -->
     <span
-      v-if="modelValue > 0"
+      v-if="hoverValue > 0 && !props.readonly"
+      class="absolute -top-6 left-1/2 -translate-x-1/2 rounded bg-[var(--color-text)] px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-[var(--color-bg)]"
+    >
+      {{ hoverValue }} 分
+    </span>
+    <span
+      v-else-if="modelValue > 0"
       class="ml-1 font-semibold text-[var(--color-text)]"
       :class="props.size === 'sm' ? 'text-xs' : 'text-sm'"
     >

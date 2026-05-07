@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { X } from 'lucide-vue-next';
+import { X, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 defineProps<{
   paths: string[];
@@ -19,6 +19,31 @@ function openLightbox(index: number) {
 function closeLightbox() {
   lightboxIndex.value = -1;
 }
+
+function prev(e: Event) {
+  e.stopPropagation();
+  if (lightboxIndex.value > 0) lightboxIndex.value--;
+}
+
+function next(e: Event) {
+  e.stopPropagation();
+  const paths = document.querySelectorAll('[data-photo]');
+  if (lightboxIndex.value < paths.length - 1) lightboxIndex.value++;
+}
+
+function onKeydown(e: KeyboardEvent) {
+  if (lightboxIndex.value < 0) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lightboxIndex.value = Math.max(0, lightboxIndex.value - 1);
+  if (e.key === 'ArrowRight')
+    lightboxIndex.value = Math.min(
+      document.querySelectorAll('[data-photo]').length - 1,
+      lightboxIndex.value + 1,
+    );
+}
+
+onMounted(() => window.addEventListener('keydown', onKeydown));
+onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 </script>
 
 <template>
@@ -28,6 +53,7 @@ function closeLightbox() {
       <div
         v-for="(path, index) in paths"
         :key="path"
+        data-photo
         class="group relative aspect-square cursor-pointer overflow-hidden rounded-lg border border-[var(--color-border)]"
         @click="openLightbox(index)"
       >
@@ -39,10 +65,10 @@ function closeLightbox() {
         />
         <button
           v-if="editable"
-          class="absolute top-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 sm:h-5 sm:w-5"
+          class="absolute top-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-red-600 active:bg-red-700 transition-colors"
           @click.stop="emit('delete', index)"
         >
-          <X class="h-4 w-4 sm:h-3 sm:w-3" />
+          <X class="h-4 w-4" />
         </button>
       </div>
     </div>
@@ -61,6 +87,32 @@ function closeLightbox() {
           >
             <X class="h-6 w-6" />
           </button>
+
+          <!-- Prev -->
+          <button
+            v-if="lightboxIndex > 0"
+            class="absolute left-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+            @click="prev"
+          >
+            <ChevronLeft class="h-6 w-6" />
+          </button>
+
+          <!-- Next -->
+          <button
+            v-if="lightboxIndex < paths.length - 1"
+            class="absolute right-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+            @click="next"
+          >
+            <ChevronRight class="h-6 w-6" />
+          </button>
+
+          <!-- Counter -->
+          <div
+            class="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-sm text-white"
+          >
+            {{ lightboxIndex + 1 }} / {{ paths.length }}
+          </div>
+
           <img
             :src="paths[lightboxIndex]"
             class="max-h-[90vh] max-w-[90vw] rounded-lg object-contain"

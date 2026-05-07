@@ -95,7 +95,7 @@ const showSearch = ref(!props.isEdit);
     </div>
 
     <!-- Type + Year + Director -->
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">类型</label>
         <DictSelect v-model="form.type" category="media_type" placeholder="选择类型" />
@@ -121,7 +121,7 @@ const showSearch = ref(!props.isEdit);
     </div>
 
     <!-- Rating + Status -->
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">评分</label>
         <RatingStars v-model="form.rating" />
@@ -133,7 +133,10 @@ const showSearch = ref(!props.isEdit);
     </div>
 
     <!-- Episodes (for TV) -->
-    <div v-if="form.type === 'tv' || form.type === 'anime'" class="grid grid-cols-3 gap-4">
+    <div
+      v-if="form.type === 'tv' || form.type === 'anime'"
+      class="grid grid-cols-1 gap-4 sm:grid-cols-3"
+    >
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">当前季</label>
         <input

@@ -21,11 +21,14 @@ const pageTitles: Record<string, string> = {
 const pageTitle = computed(() => {
   // Check exact match first
   if (pageTitles[route.path]) return pageTitles[route.path];
+  const isEdit = route.path.endsWith('/edit');
+  const basePath = isEdit ? route.path.slice(0, -5) : route.path;
   // Check pattern match for dynamic routes
-  if (route.path.startsWith('/foods/') && route.path !== '/foods/add') return '美食详情';
-  if (route.path.startsWith('/media/') && route.path !== '/media/add') return '媒体详情';
-  if (route.path.startsWith('/games/') && route.path !== '/games/add') return '游戏详情';
-  if (route.path.startsWith('/books/') && route.path !== '/books/add') return '书籍详情';
+  if (basePath.match(/^\/foods\/\d+$/)) return isEdit ? '编辑美食' : '美食详情';
+  if (basePath.match(/^\/media\/\d+$/)) return isEdit ? '编辑媒体' : '媒体详情';
+  if (basePath.match(/^\/games\/\d+$/)) return isEdit ? '编辑游戏' : '游戏详情';
+  if (basePath.match(/^\/books\/\d+$/)) return isEdit ? '编辑书籍' : '书籍详情';
+  if (basePath.match(/^\/expenses\/\d+$/)) return isEdit ? '编辑记录' : '记录详情';
   return 'LifeOS';
 });
 </script>

@@ -48,7 +48,7 @@ async function uploadFiles(files: File[]) {
       emit('update:modelValue', [...props.modelValue, ...res.data]);
     }
   } catch {
-    // handle error
+    useToast().error('照片上传失败，请重试');
   } finally {
     uploading.value = false;
   }
@@ -114,10 +114,10 @@ function onDrop(e: DragEvent) {
         />
         <button
           type="button"
-          class="absolute top-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 sm:h-5 sm:w-5"
+          class="absolute top-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-red-600 active:bg-red-700 transition-colors"
           @click.stop="remove(index)"
         >
-          <X class="h-4 w-4 sm:h-3 sm:w-3" />
+          <X class="h-4 w-4" />
         </button>
       </div>
     </div>

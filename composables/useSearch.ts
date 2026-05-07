@@ -14,6 +14,8 @@ export function useSearch(source: 'media' | 'books' | 'games') {
     try {
       const res = await api.get<any[]>(`/api/search/${source}`, { q });
       if (res.success) results.value = res.data;
+    } catch (e) {
+      console.warn('Search failed:', e);
     } finally {
       loading.value = false;
     }
