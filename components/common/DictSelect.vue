@@ -75,6 +75,7 @@ if (!loaded.value) load();
       >
         <button
           v-if="clearable && modelValue"
+          type="button"
           class="w-full px-3 py-1.5 text-left text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg)]"
           @click="emit('update:modelValue', '')"
         >
@@ -83,6 +84,7 @@ if (!loaded.value) load();
         <button
           v-for="item in items"
           :key="item.code"
+          type="button"
           class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--color-bg)]"
           :class="
             modelValue === item.code

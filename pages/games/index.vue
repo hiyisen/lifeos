@@ -34,10 +34,7 @@ function clear() {
   status.value = '';
   page.value = 1;
 }
-watch([search, platform, status], () => {
-  page.value = 1;
-});
-watch(page, () => fetch());
+watch([search, platform, status, page], () => fetch());
 onMounted(async () => {
   if (!loaded.value) await load();
   fetch();

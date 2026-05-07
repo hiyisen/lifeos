@@ -36,11 +36,7 @@ function clear() {
   search.value = '';
   page.value = 1;
 }
-watch([category, type, search], () => {
-  page.value = 1;
-  fetch();
-});
-watch(page, () => fetch());
+watch([category, type, search, page], () => fetch());
 onMounted(async () => {
   if (!loaded.value) await load();
   fetch();

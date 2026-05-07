@@ -35,11 +35,7 @@ function clearFilters() {
   status.value = '';
   page.value = 1;
 }
-watch([search, type, status], () => {
-  page.value = 1;
-  fetch();
-});
-watch(page, () => fetch());
+watch([search, type, status, page], () => fetch());
 onMounted(async () => {
   if (!loaded.value) await load();
   fetch();

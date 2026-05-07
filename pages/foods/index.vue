@@ -48,12 +48,7 @@ function clearFilters() {
   page.value = 1;
 }
 
-watch([search, cuisine, ratingMin, dateFrom, dateTo], () => {
-  page.value = 1;
-  fetchFoods();
-});
-
-watch(page, () => fetchFoods());
+watch([search, cuisine, ratingMin, dateFrom, dateTo, page], () => fetchFoods());
 
 const totalPages = computed(() => Math.ceil(total.value / limit));
 
