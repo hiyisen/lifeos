@@ -6,7 +6,12 @@ dist/
 
 # Runtime data
 data/lifeos.db
+data/lifeos.db-shm
+data/lifeos.db-wal
 data/photos/
+
+# Test artifacts
+test-results/
 
 # Env
 .env

@@ -4,6 +4,7 @@ import { Upload, X } from 'lucide-vue-next';
 const props = withDefaults(
   defineProps<{
     modelValue: string[];
+    module: string;
     maxFiles?: number;
     accept?: string;
   }>(),
@@ -32,8 +33,9 @@ async function uploadFiles(files: File[]) {
   if (remaining <= 0) return;
 
   const formData = new FormData();
+  formData.append('module', props.module);
   for (let i = 0; i < Math.min(files.length, remaining); i++) {
-    formData.append('photos', files[i]);
+    formData.append('files', files[i]);
   }
 
   uploading.value = true;

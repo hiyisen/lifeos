@@ -1,7 +1,7 @@
 type Theme = 'light' | 'dark' | 'system';
 
 function getStoredTheme(): Theme {
-  if (typeof localStorage === 'undefined') return 'system';
+  if (import.meta.server) return 'system';
   return (localStorage.getItem('lifeos-theme') as Theme) || 'system';
 }
 

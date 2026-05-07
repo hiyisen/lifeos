@@ -178,7 +178,7 @@ function onSubmit() {
     <!-- Photos -->
     <div>
       <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">照片</label>
-      <PhotoUpload v-model="form.photo_paths" :max-files="9" />
+      <PhotoUpload v-model="form.photo_paths" module="foods" :max-files="9" />
     </div>
 
     <!-- Note -->
