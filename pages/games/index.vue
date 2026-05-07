@@ -6,6 +6,8 @@ const games = ref<any[]>([]);
 const loading = ref(true);
 const total = ref(0);
 const page = ref(1);
+const limit = 20;
+const totalPages = computed(() => Math.ceil(total.value / limit));
 const search = ref('');
 const platform = ref('');
 const status = ref('');
@@ -15,7 +17,7 @@ async function fetch() {
   loading.value = true;
   const res = await api.get('/api/games', {
     page: page.value,
-    limit: 20,
+    limit,
     search: search.value || undefined,
     platform: platform.value || undefined,
     status: status.value || undefined,
@@ -34,7 +36,6 @@ function clear() {
 }
 watch([search, platform, status], () => {
   page.value = 1;
-  fetch();
 });
 watch(page, () => fetch());
 onMounted(async () => {
@@ -92,6 +93,28 @@ onMounted(async () => {
       @action="navigateTo('/games/add')"
     />
     <div v-else class="space-y-3"><GameCard v-for="g in games" :key="g.id" :game="g" /></div>
+
+    <!-- Pagination -->
+    <div v-if="totalPages > 1" class="mt-8 flex items-center justify-center gap-2">
+      <button
+        :disabled="page <= 1"
+        class="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm text-[var(--color-text)] transition-colors hover:bg-[var(--color-bg)] disabled:opacity-30"
+        @click="page--"
+      >
+        上一页
+      </button>
+      <span class="text-sm text-[var(--color-text-secondary)]">
+        {{ page }} / {{ totalPages }}
+      </span>
+      <button
+        :disabled="page >= totalPages"
+        class="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm text-[var(--color-text)] transition-colors hover:bg-[var(--color-bg)] disabled:opacity-30"
+        @click="page++"
+      >
+        下一页
+      </button>
+    </div>
+
     <FabButton to="/games/add" />
   </div>
 </template>

@@ -2,9 +2,18 @@ import { getDb } from '../../utils/db';
 
 export default defineEventHandler(async (event) => {
   const id = Number(getRouterParam(event, 'id'));
-  const body = await readBody(event);
-  const db = getDb();
+  const body = await readBody<{
+    title: string; platform: string; genre?: string;
+    rating?: number; review?: string; cover_path?: string;
+    source_id?: string; source_url?: string; status?: string;
+    play_hours?: number; year?: number;
+  }>(event);
 
+  if (!body.title || !body.platform) {
+    throw createError({ statusCode: 400, message: 'title and platform are required' });
+  }
+
+  const db = getDb();
   if (!db.get('SELECT id FROM games WHERE id = ?', id)) {
     throw createError({ statusCode: 404, message: 'Game not found' });
   }

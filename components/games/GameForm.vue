@@ -13,7 +13,7 @@ const form = reactive({
   review: props.initialData?.review || '',
   status: props.initialData?.status || 'wishlist',
   play_hours: props.initialData?.play_hours || 0,
-  year: props.initialData?.year || (undefined as number | undefined),
+  year: props.initialData?.year ?? ('' as unknown as number),
 });
 
 function onSubmit() {

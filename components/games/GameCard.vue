@@ -2,8 +2,7 @@
 import { Gamepad2 } from 'lucide-vue-next';
 
 defineProps<{ game: Record<string, any> }>();
-const { getLabel, loaded, load } = useDict();
-if (!loaded.value) load();
+const { getLabel } = useDict();
 </script>
 
 <template>

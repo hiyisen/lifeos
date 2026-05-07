@@ -3,8 +3,7 @@ import { Pencil, Trash2, Gamepad2 } from 'lucide-vue-next';
 
 defineProps<{ game: Record<string, any> }>();
 defineEmits<{ edit: [id: number]; delete: [id: number] }>();
-const { getLabel, loaded, load } = useDict();
-if (!loaded.value) load();
+const { getLabel } = useDict();
 const showDeleteConfirm = ref(false);
 </script>
 

@@ -13,8 +13,16 @@ async function getAccessToken(): Promise<string | null> {
   if (_accessToken && Date.now() < _tokenExpiresAt) return _accessToken;
 
   const res = await $fetch<{ access_token: string; expires_in: number }>(
-    `https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`,
-    { method: 'POST' },
+    'https://id.twitch.tv/oauth2/token',
+    {
+      method: 'POST',
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'client_credentials',
+      }).toString(),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    },
   );
 
   _accessToken = res.access_token;

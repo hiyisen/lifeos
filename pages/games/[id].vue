@@ -16,8 +16,13 @@ onMounted(async () => {
   }
 });
 async function onDelete(id: number) {
-  await api.del(`/api/games/${id}`);
-  navigateTo('/games');
+  try {
+    const res = await api.del(`/api/games/${id}`);
+    if (res.success) navigateTo('/games');
+    else error.value = res.error || '删除失败';
+  } catch {
+    error.value = '网络错误，请重试';
+  }
 }
 </script>
 
