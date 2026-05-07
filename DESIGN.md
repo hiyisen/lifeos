@@ -357,7 +357,7 @@ CREATE TABLE tasks (
 | 框架 | **Nuxt 3** | 3.x | Vue 3 全栈，前后端不分离，SSR + Server Routes |
 | 数据库 | **SQLite** | 3 | 单文件零配置，个人数据完全够用 |
 | SQL 驱动 | **better-sqlite3** | latest | 同步 API，性能极佳，Node.js 下 SQLite 最佳选择 |
-| 样式 | **Tailwind CSS** | v4 | 原子化 CSS，暗色模式内置支持 |
+| 样式 | **Tailwind CSS** | v4 | 原子化 CSS，暗色模式内置，通过 `@tailwindcss/vite` 插件集成 |
 | 动画 | **GSAP + VueUse Motion** | — | 页面过渡 / 滚动动画 / 微交互 |
 | 图表 | **ECharts** | 5.x | 功能最全，中文友好，暗色主题适配好 |
 | 图标 | **Lucide Vue** | latest | 简洁一致，Tree-shakable |

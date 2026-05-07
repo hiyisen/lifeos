@@ -11,7 +11,7 @@ LifeOS — personal life management system for a single user. Record and track f
 - **Framework**: Nuxt 3 (Vue 3 full-stack, SSR + Server Routes, monolithic deployment)
 - **Runtime**: Node.js ≥20 LTS
 - **Database**: SQLite via `better-sqlite3` (single file at `data/lifeos.db`)
-- **Styling**: Tailwind CSS v4 (dark mode via `class` strategy)
+- **Styling**: Tailwind CSS v4 via `@tailwindcss/vite` plugin (dark mode via `class` strategy)
 - **Animation**: GSAP + VueUse Motion + canvas-confetti
 - **Charts**: ECharts 5.x
 - **Icons**: Lucide Vue
@@ -32,7 +32,10 @@ LifeOS — personal life management system for a single user. Record and track f
 npm run dev          # Start dev server (with hot reload)
 npm run build        # Production build
 npm run preview      # Preview production build locally
-npx nuxi typecheck   # TypeScript type checking
+npm run lint         # ESLint auto-fix
+npm run format       # Prettier format
+npm run typecheck    # TypeScript type checking (vue-tsc)
+npm run check        # Full check: lint + format + typecheck
 ```
 
 ## Available Skills
