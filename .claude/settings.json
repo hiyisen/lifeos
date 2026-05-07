@@ -57,7 +57,5 @@
     "update-config",
     "init"
   ],
-  "availableMcps": [
-    "notion"
-  ]
+  "availableMcps": ["notion"]
 }

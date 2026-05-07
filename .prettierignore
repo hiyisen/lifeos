@@ -1,0 +1,6 @@
+.claude/
+.nuxt/
+.output/
+dist/
+node_modules/
+data/

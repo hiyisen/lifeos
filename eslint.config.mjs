@@ -6,6 +6,7 @@ export default withNuxt().append(eslintConfigPrettier, {
     'vue/multi-word-component-names': 'off',
     'vue/no-v-html': 'warn',
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-explicit-any': 'warn',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
   },
 });

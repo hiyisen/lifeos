@@ -5,12 +5,15 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  modules: [
-    '@vueuse/nuxt',
-    '@nuxt/eslint',
-  ],
+  modules: ['@vueuse/nuxt', '@nuxt/eslint'],
 
-  css: ['~/assets/css/main.css'],
+  components: {
+    dirs: [
+      { path: '~/components', pathPrefix: false },
+    ],
+  },
+
+  css: ['assets/css/main.css'],
 
   typescript: {
     strict: true,
