@@ -25,4 +25,15 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  app: {
+    head: {
+      script: [
+        {
+          innerHTML: `(function(){var t=localStorage.getItem('lifeos-theme')||'system';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.toggle('dark',d);})();`,
+          tagPriority: 'critical',
+        },
+      ],
+    },
+  },
 });

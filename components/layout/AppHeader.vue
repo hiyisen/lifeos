@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
+const isMobile = useMediaQuery('(max-width: 767px)');
 
 const pageTitles: Record<string, string> = {
   '/': '首页',
@@ -35,7 +36,7 @@ const pageTitle = computed(() => {
   >
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <h1 class="text-xl font-bold text-[var(--color-text)]">{{ pageTitle }}</h1>
-      <div class="flex items-center gap-2 md:hidden">
+      <div v-if="isMobile" class="flex items-center gap-2">
         <ThemeToggle />
       </div>
     </div>
