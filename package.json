@@ -1,0 +1,44 @@
+{
+  "name": "lifeos",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "vue-tsc --noEmit",
+    "check": "npm run lint:check && npm run format:check && npm run typecheck"
+  },
+  "dependencies": {
+    "nuxt": "^3.16.0",
+    "vue": "^3.5.0",
+    "better-sqlite3": "^11.7.0",
+    "echarts": "^5.6.0",
+    "gsap": "^3.12.0",
+    "lucide-vue-next": "^0.468.0",
+    "@vueuse/core": "^12.8.0",
+    "canvas-confetti": "^1.9.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.0.0",
+    "@types/better-sqlite3": "^7.6.0",
+    "@types/canvas-confetti": "^1.6.0",
+    "@vueuse/nuxt": "^12.8.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-prettier": "^5.2.0",
+    "prettier": "^3.4.0",
+    "prettier-plugin-tailwindcss": "^0.6.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "typescript": "^5.7.0",
+    "vue-tsc": "^2.2.0"
+  }
+}

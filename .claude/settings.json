@@ -1,0 +1,55 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(rsync *)",
+      "Bash(rm *)",
+      "Bash(cat *)",
+      "Bash(curl *)",
+      "Bash(pm2 *)",
+      "Bash(systemctl *)",
+      "Bash(git *)",
+      "Read",
+      "Edit",
+      "Write",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(git push --force origin main)",
+      "Bash(git push --force origin master)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'File changed — consider running npm run dev to verify'"
+          }
+        ]
+      }
+    ]
+  },
+  "availableSkills": [
+    "simplify",
+    "security-review",
+    "humanizer-zh",
+    "fewer-permission-prompts",
+    "update-config",
+    "init",
+    "git-smart-commit"
+  ],
+  "availableMcps": [
+    "notion"
+  ]
+}

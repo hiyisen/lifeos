@@ -1,0 +1,23 @@
+# Nuxt
+.output/
+.nuxt/
+node_modules/
+dist/
+
+# Runtime data
+data/lifeos.db
+data/photos/
+
+# Env
+.env
+.env.local
+.env.production
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,14 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "moduleResolution": "bundler",
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    ".output",
+    "data"
+  ]
+}
