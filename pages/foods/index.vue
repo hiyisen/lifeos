@@ -91,13 +91,13 @@ onMounted(async () => {
         v-if="showFilters"
         class="flex flex-wrap items-end gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
       >
-        <div class="w-40">
+        <div class="w-full sm:w-40">
           <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]"
             >菜系</label
           >
           <DictSelect v-model="cuisine" category="cuisine_tag" placeholder="全部菜系" clearable />
         </div>
-        <div class="w-40">
+        <div class="w-full sm:w-40">
           <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]"
             >最低评分</label
           >

@@ -12,9 +12,9 @@ const showDeleteConfirm = ref(false);
 
 <template>
   <div class="mx-auto max-w-2xl">
-    <div class="mb-6 flex gap-6">
+    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:gap-6">
       <div
-        class="h-56 w-40 flex-shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]"
+        class="h-44 w-28 flex-shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] sm:h-56 sm:w-40"
       >
         <img
           v-if="media.poster_path"

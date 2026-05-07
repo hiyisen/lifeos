@@ -178,7 +178,7 @@ onUnmounted(() => {
           class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"
         >
           <h3 class="mb-4 text-sm font-semibold text-[var(--color-text)]">评分分布</h3>
-          <div ref="ratingChartRef" class="h-64 w-full" />
+          <div ref="ratingChartRef" class="h-48 w-full sm:h-64" />
           <div
             v-if="stats.ratingDist.length === 0"
             class="py-8 text-center text-sm text-[var(--color-text-secondary)]"
@@ -193,7 +193,7 @@ onUnmounted(() => {
           :class="!hasRating || !stats.ratingDist?.length ? 'lg:col-span-2' : ''"
         >
           <h3 class="mb-4 text-sm font-semibold text-[var(--color-text)]">月度趋势</h3>
-          <div v-if="stats.monthlyTrend?.length" ref="trendChartRef" class="h-64 w-full" />
+          <div v-if="stats.monthlyTrend?.length" ref="trendChartRef" class="h-48 w-full sm:h-64" />
           <div v-else class="py-8 text-center text-sm text-[var(--color-text-secondary)]">
             暂无数据
           </div>

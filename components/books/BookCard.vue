@@ -11,7 +11,7 @@ if (!loaded.value) load();
     :to="`/books/${book.id}`"
     class="group flex gap-4 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3 transition-all hover:-translate-y-0.5 hover:shadow-lg"
   >
-    <div class="h-28 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-[var(--color-bg)]">
+    <div class="h-24 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-[var(--color-bg)] sm:h-28 sm:w-20">
       <img
         v-if="book.cover_path"
         :src="book.cover_path"

@@ -38,7 +38,7 @@ function isActive(to: string) {
 
 <template>
   <nav
-    class="fixed right-0 bottom-0 left-0 z-40 border-t border-[var(--color-border)] bg-[var(--color-surface)]"
+    class="fixed right-0 bottom-0 left-0 z-40 border-t border-[var(--color-border)] bg-[var(--color-surface)] pb-[env(safe-area-inset-bottom,0px)]"
   >
     <div class="flex items-center justify-around py-1">
       <NuxtLink
@@ -76,7 +76,7 @@ function isActive(to: string) {
       <Transition name="slide-up">
         <div
           v-if="showMore"
-          class="fixed right-0 bottom-0 left-0 z-50 rounded-t-2xl border-t border-[var(--color-border)] bg-[var(--color-surface)] p-4 pb-8"
+          class="fixed right-0 bottom-0 left-0 z-50 rounded-t-2xl border-t border-[var(--color-border)] bg-[var(--color-surface)] p-4 pb-[calc(2rem+env(safe-area-inset-bottom,0px))]"
         >
           <div class="mb-3 flex items-center justify-between">
             <span class="text-sm font-semibold text-[var(--color-text-secondary)]">更多</span>

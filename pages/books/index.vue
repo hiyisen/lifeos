@@ -59,11 +59,11 @@ onMounted(async () => {
       v-if="showFilters"
       class="mb-6 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
     >
-      <div class="w-40">
+      <div class="w-full sm:w-40">
         <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">类型</label
         ><DictSelect v-model="type" category="book_type" placeholder="全部" clearable />
       </div>
-      <div class="w-40">
+      <div class="w-full sm:w-40">
         <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">状态</label
         ><DictSelect v-model="status" category="book_status" placeholder="全部" clearable />
       </div>

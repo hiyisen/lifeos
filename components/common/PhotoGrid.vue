@@ -39,10 +39,10 @@ function closeLightbox() {
         />
         <button
           v-if="editable"
-          class="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
+          class="absolute top-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 sm:h-5 sm:w-5"
           @click.stop="emit('delete', index)"
         >
-          <X class="h-3 w-3" />
+          <X class="h-4 w-4 sm:h-3 sm:w-3" />
         </button>
       </div>
     </div>

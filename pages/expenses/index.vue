@@ -65,7 +65,7 @@ onMounted(async () => {
       v-if="showFilters"
       class="mb-6 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
     >
-      <div class="w-40">
+      <div class="w-full sm:w-40">
         <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">分类</label
         ><DictSelect
           v-model="category"
@@ -74,7 +74,7 @@ onMounted(async () => {
           clearable
         />
       </div>
-      <div class="w-32">
+      <div class="w-full sm:w-32">
         <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">类型</label
         ><select
           v-model="type"
