@@ -135,9 +135,7 @@ function onSubmit() {
     <div class="grid grid-cols-3 gap-4">
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">评分</label>
-        <div class="pt-1">
-          <RatingStars v-model="form.rating" />
-        </div>
+        <RatingStars v-model="form.rating" />
       </div>
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">人均</label>

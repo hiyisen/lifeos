@@ -35,7 +35,7 @@ function setRating(starIndex: number) {
 </script>
 
 <template>
-  <div class="inline-flex items-center gap-0.5">
+  <div class="inline-flex items-center gap-0.5 py-2">
     <button
       v-for="i in 5"
       :key="i"
