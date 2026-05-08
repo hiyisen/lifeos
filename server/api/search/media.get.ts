@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
           title: item.title,
           original_title: item.original_title,
           year: item.year,
-          type: 'movie',
+          type: item.type || 'movie',
           poster: doubanImageUrl(item.img),
           source_id: `douban:${item.id}`,
           source_url: item.url || `https://movie.douban.com/subject/${item.id}/`,

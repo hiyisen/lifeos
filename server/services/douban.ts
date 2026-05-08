@@ -9,7 +9,19 @@ const DOUBAN_BOOK_SUGGEST = 'https://book.douban.com/j/subject_suggest';
 let lastRequestTime = 0;
 const MIN_INTERVAL = 1500;
 
-async function rateLimitedFetch(url: string, params: Record<string, string>): Promise<string> {
+// Shared session bid — rotate on each request but keep consistent across fetch calls
+function generateBid(): string {
+  return Array.from({ length: 11 }, () => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]).join('');
+}
+
+let sessionBid = generateBid();
+
+const BASE_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+  'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+};
+
+async function waitForRateLimit(): Promise<void> {
   const now = Date.now();
   const elapsed = now - lastRequestTime;
   if (elapsed < MIN_INTERVAL) {
@@ -17,58 +29,38 @@ async function rateLimitedFetch(url: string, params: Record<string, string>): Pr
     await new Promise((r) => setTimeout(r, MIN_INTERVAL - elapsed + jitter));
   }
   lastRequestTime = Date.now();
+  sessionBid = generateBid();
+}
 
-  const bid = Array.from(
-    { length: 11 },
-    () => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)],
-  ).join('');
+async function doubanFetch(url: string, useMobileUA = false): Promise<string> {
+  await waitForRateLimit();
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': useMobileUA
+        ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1'
+        : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+      Cookie: `bid=${sessionBid}`,
+    },
+  });
+  return response.text();
+}
 
+async function rateLimitedFetch(url: string, params: Record<string, string>): Promise<string> {
+  await waitForRateLimit();
   const searchUrl = new URL(url);
   for (const [k, v] of Object.entries(params)) {
     searchUrl.searchParams.set(k, v);
   }
-
   const response = await fetch(searchUrl.toString(), {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-      'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-      Cookie: `bid=${bid}`,
-    },
+    headers: { ...BASE_HEADERS, Cookie: `bid=${sessionBid}` },
   });
-
   return response.text();
 }
 
 function isBlocked(html: string): boolean {
   // Detect Douban's JS challenge page — it has a specific form with SHA-512 proof-of-work
   return /function sha512/.test(html) && /name="sec"/.test(html) && /name="cha"/.test(html);
-}
-
-async function fetchUrl(url: string): Promise<string> {
-  const now = Date.now();
-  const elapsed = now - lastRequestTime;
-  if (elapsed < MIN_INTERVAL) {
-    const jitter = Math.random() * 1000;
-    await new Promise((r) => setTimeout(r, MIN_INTERVAL - elapsed + jitter));
-  }
-  lastRequestTime = Date.now();
-
-  const bid = Array.from(
-    { length: 11 },
-    () => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)],
-  ).join('');
-
-  const response = await fetch(url, {
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-      'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-      Cookie: `bid=${bid}`,
-    },
-  });
-
-  return response.text();
 }
 
 // ---- Media Detail ----
@@ -80,9 +72,12 @@ export interface DoubanMediaDetail {
   genres: string[];
   country?: string;
   language?: string;
-  runtime?: string;
+  runtime?: number;
   release_date?: string;
   original_title?: string;
+  directors: string[];
+  actors: string[];
+  imdb_id?: string;
 }
 
 export async function fetchDoubanMediaDetail(id: string): Promise<DoubanMediaDetail | null> {
@@ -90,7 +85,7 @@ export async function fetchDoubanMediaDetail(id: string): Promise<DoubanMediaDet
   if (cached) return JSON.parse(cached);
 
   try {
-    const html = await fetchUrl(`https://m.douban.com/movie/subject/${id}/`);
+    const html = await doubanFetch(`https://m.douban.com/movie/subject/${id}/`, true);
     if (isBlocked(html)) return null;
 
     const $ = cheerio.load(html);
@@ -125,17 +120,24 @@ export async function fetchDoubanMediaDetail(id: string): Promise<DoubanMediaDet
     const infoMatch = bodyText.match(/([一-龥]+(?:\s*\/\s*[一-龥]+)*?)\s*\/\s*(\d{4}[^上]*上映)/);
     const genres: string[] = [];
     let country: string | undefined;
-    let runtime: string | undefined;
+    let runtime: number | undefined;
+    let release_date: string | undefined;
 
     if (infoMatch) {
       const parts = infoMatch[1].split('/').map((s: string) => s.trim());
       if (parts.length > 0) country = parts[0];
       genres.push(...parts.slice(1).filter((g: string) => g.length > 0));
+      if (infoMatch[2]) {
+        const rawDate = infoMatch[2].replace('上映', '').trim();
+        // Extract just the YYYY-MM-DD part
+        const dateMatch = rawDate.match(/(\d{4}-\d{2}-\d{2})/);
+        release_date = dateMatch ? dateMatch[1] : rawDate;
+      }
     }
 
     // Runtime
-    const runtimeMatch = bodyText.match(/片长(\d+分钟)/);
-    if (runtimeMatch) runtime = runtimeMatch[1];
+    const runtimeMatch = bodyText.match(/片长(\d+)分钟/);
+    if (runtimeMatch) runtime = Number(runtimeMatch[1]);
 
     const detail: DoubanMediaDetail = {
       rating: rating ? Number(rating) : undefined,
@@ -144,7 +146,10 @@ export async function fetchDoubanMediaDetail(id: string): Promise<DoubanMediaDet
       genres,
       country,
       runtime,
+      release_date,
       original_title: original_title || undefined,
+      directors: [],
+      actors: [],
     };
 
     cacheSearchResult('douban-media-detail', id, detail);
@@ -173,7 +178,7 @@ export async function fetchDoubanBookDetail(id: string): Promise<DoubanBookDetai
   if (cached) return JSON.parse(cached);
 
   try {
-    const html = await fetchUrl(`https://book.douban.com/subject/${id}/`);
+    const html = await doubanFetch(`https://book.douban.com/subject/${id}/`);
     if (isBlocked(html)) return null;
 
     const $ = cheerio.load(html);
@@ -263,6 +268,8 @@ export interface DoubanMediaResult {
   year?: number;
   img?: string;
   url: string;
+  type?: string;
+  episode?: string;
 }
 
 export interface DoubanBookResult {
@@ -297,6 +304,8 @@ export async function searchDoubanMedia(query: string): Promise<DoubanMediaResul
       year: item.year ? Number(item.year) : undefined,
       img: (item.img as string) || undefined,
       url: (item.url as string) || `https://movie.douban.com/subject/${item.id}/`,
+      type: (item.type as string) || (item.episode ? 'tv' : 'movie'),
+      episode: (item.episode as string) || undefined,
     }));
 
     cacheSearchResult('douban-media', q, results);

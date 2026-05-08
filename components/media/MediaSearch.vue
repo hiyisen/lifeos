@@ -27,8 +27,10 @@ function getTypeLabel(type: string) {
 }
 
 async function onSelect(item: any) {
-  const doubanId = item.source_id?.replace('douban:', '');
-  if (!doubanId) {
+  const doubanId = item.source_id?.startsWith('douban:')
+    ? item.source_id.replace('douban:', '')
+    : null;
+  if (item.source === 'tmdb' || !doubanId) {
     emitSelect(item);
     return;
   }
@@ -48,7 +50,7 @@ async function onSelect(item: any) {
         type: item.type,
         year: d.year || item.year || undefined,
         rating: d.rating || item.rating || undefined,
-        director: d.directors?.join('、') || d.country || undefined,
+        director: d.directors?.join('、') || undefined,
         genres: d.genres || [],
         summary: d.summary || '',
         actors: d.actors?.join('、') || undefined,

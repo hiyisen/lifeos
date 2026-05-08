@@ -10,15 +10,17 @@ const emit = defineEmits<{
 }>();
 
 async function onSelect(item: any) {
-  const doubanId = item.source_id?.replace('douban:', '');
-  if (!doubanId) {
+  const doubanId = item.source_id?.startsWith('douban:')
+    ? item.source_id.replace('douban:', '')
+    : null;
+  if (item.source === 'openlibrary' || !doubanId) {
     emitSelect(item);
     return;
   }
 
   loadingDetail.value = item.source_id;
   try {
-    const res = await api.get('/api/search/book-detail', { id: doubanId });
+    const res = await api.get('/api/search/book-detail', { id: doubanId, source_id: item.source_id });
     if (res.success && res.data) {
       const d = res.data;
       emit('select', {

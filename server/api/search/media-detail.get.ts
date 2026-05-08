@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const detail = await fetchDoubanMediaDetail(id);
-    if (detail && (detail.rating || detail.summary)) {
+    if (detail && (detail.rating || detail.summary || detail.year || detail.genres.length > 0)) {
       return { success: true, data: detail };
     }
 

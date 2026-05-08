@@ -49,7 +49,7 @@ onClickOutside(dropdownRef, () => {
   open.value = false;
 });
 
-if (!loaded.value) load();
+if (!loaded.value && import.meta.client) load();
 </script>
 
 <template>
