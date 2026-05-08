@@ -166,7 +166,7 @@ export default defineNitroPlugin(() => {
     { cat: 'cuisine_tag', code: 'chuan', label: '川菜', color: '#ef4444' },
     { cat: 'cuisine_tag', code: 'yue', label: '粤菜', color: '#f59e0b' },
     { cat: 'cuisine_tag', code: 'lu', label: '鲁菜', color: '#84cc16' },
-    { cat: 'cuisine_tag', code: 'su', label: '苏菜', color: '#06b6d4' },
+    { cat: 'cuisine_tag', code: 'su', label: '融合菜', color: '#06b6d4' },
     { cat: 'cuisine_tag', code: 'xiang', label: '湘菜', color: '#f97316' },
     { cat: 'cuisine_tag', code: 'ri_liao', label: '日料', color: '#ec4899' },
     { cat: 'cuisine_tag', code: 'han_liao', label: '韩料', color: '#8b5cf6' },
@@ -177,6 +177,9 @@ export default defineNitroPlugin(() => {
     { cat: 'cuisine_tag', code: 'tian_pin', label: '甜品', color: '#f43f5e' },
     { cat: 'cuisine_tag', code: 'jian_kang', label: '轻食', color: '#22c55e' },
     { cat: 'cuisine_tag', code: 'jia_chang', label: '家常菜', color: '#78716c' },
+    { cat: 'cuisine_tag', code: 'dong_bei', label: '东北菜', color: '#f59e0b' },
+    { cat: 'cuisine_tag', code: 'nai_cha', label: '奶茶', color: '#ec4899' },
+    { cat: 'cuisine_tag', code: 'jiu_ba', label: '酒吧', color: '#a855f7' },
     // media_type (category_id=2)
     { cat: 'media_type', code: 'movie', label: '电影', color: '#6366f1' },
     { cat: 'media_type', code: 'tv', label: '电视剧', color: '#8b5cf6' },

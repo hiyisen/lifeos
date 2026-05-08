@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Sun, Moon, Monitor, ChevronDown } from 'lucide-vue-next';
 
+withDefaults(defineProps<{ dropUp?: boolean }>(), { dropUp: true });
+
 const { theme, setTheme } = useTheme();
 
 const modes: { value: 'light' | 'dark' | 'system'; icon: typeof Sun; label: string }[] = [
@@ -38,7 +40,8 @@ function select(value: 'light' | 'dark' | 'system') {
     <Transition name="dropdown">
       <div
         v-if="open"
-        class="absolute bottom-full left-0 z-50 mb-1 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-lg"
+        class="absolute left-0 z-50 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] py-1 shadow-lg"
+        :class="dropUp ? 'bottom-full mb-1' : 'top-full mt-1'"
       >
         <button
           v-for="mode in modes"

@@ -40,7 +40,7 @@ const pageTitle = computed(() => {
     <div class="flex items-center justify-between px-4 py-3 md:px-6">
       <h1 class="text-xl font-bold text-[var(--color-text)]">{{ pageTitle }}</h1>
       <div v-if="isMobile" class="flex items-center gap-2">
-        <ThemeToggle />
+        <ThemeToggle :drop-up="false" />
       </div>
     </div>
   </header>
