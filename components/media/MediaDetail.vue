@@ -1,8 +1,21 @@
 <script setup lang="ts">
 import { Pencil, Trash2, Clapperboard } from 'lucide-vue-next';
 
-defineProps<{ media: Record<string, any> }>();
+const props = defineProps<{ media: Record<string, any> }>();
 defineEmits<{ edit: [id: number]; delete: [id: number] }>();
+
+const genreList = computed(() => {
+  const g = props.media.genres;
+  if (Array.isArray(g)) return g;
+  if (typeof g === 'string') {
+    try {
+      return JSON.parse(g);
+    } catch {
+      return g ? [g] : [];
+    }
+  }
+  return [];
+});
 
 const { getLabel, getColor, loaded, load } = useDict();
 if (!loaded.value) load();
@@ -29,16 +42,43 @@ const showDeleteConfirm = ref(false);
       <div class="flex flex-col justify-between">
         <div>
           <h1 class="text-2xl font-bold text-[var(--color-text)]">{{ media.title }}</h1>
+          <p v-if="media.original_title" class="text-sm text-[var(--color-text-secondary)]">
+            {{ media.original_title }}
+          </p>
           <p class="mt-1 text-[var(--color-text-secondary)]">
             {{ media.year || '' }}
             <span v-if="media.director">· {{ media.director }}</span>
           </p>
+          <p v-if="media.actors" class="mt-0.5 text-sm text-[var(--color-text-secondary)]">
+            主演：{{ media.actors }}
+          </p>
+          <div
+            class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--color-text-secondary)]"
+          >
+            <span v-if="media.runtime">片长 {{ media.runtime }} 分钟</span>
+            <span v-if="media.release_date">{{ media.release_date }}</span>
+            <a
+              v-if="media.imdb_id"
+              :href="`https://www.imdb.com/title/${media.imdb_id}`"
+              target="_blank"
+              class="text-primary-600 hover:underline"
+              >IMDB</a
+            >
+          </div>
           <div class="mt-3 flex flex-wrap gap-1.5">
             <StatusBadge
               :label="getLabel('media_type', media.type)"
               :color="getColor('media_type', media.type)"
             />
             <StatusBadge :label="getLabel('media_status', media.status)" />
+          </div>
+          <div v-if="genreList.length > 0" class="mt-2 flex flex-wrap gap-1">
+            <span
+              v-for="g in genreList"
+              :key="g"
+              class="rounded-full bg-[var(--color-bg)] px-2 py-0.5 text-xs text-[var(--color-text-secondary)]"
+              >{{ g }}</span
+            >
           </div>
           <div v-if="media.rating" class="mt-3">
             <RatingStars :model-value="media.rating" readonly />
@@ -48,9 +88,20 @@ const showDeleteConfirm = ref(false);
     </div>
 
     <div
+      v-if="media.summary"
+      class="mb-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
+    >
+      <h3 class="mb-1 text-xs font-medium text-[var(--color-text-secondary)]">简介</h3>
+      <p class="text-sm leading-relaxed whitespace-pre-wrap text-[var(--color-text-secondary)]">
+        {{ media.summary }}
+      </p>
+    </div>
+
+    <div
       v-if="media.review"
       class="mb-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
     >
+      <h3 class="mb-1 text-xs font-medium text-[var(--color-text-secondary)]">短评</h3>
       <p class="text-sm leading-relaxed whitespace-pre-wrap text-[var(--color-text-secondary)]">
         {{ media.review }}
       </p>

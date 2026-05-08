@@ -12,11 +12,29 @@ const emit = defineEmits<{ submit: [data: Record<string, any>]; cancel: [] }>();
 
 const form = reactive({
   title: props.initialData?.title || '',
+  original_title: props.initialData?.original_title || '',
   type: props.initialData?.type || 'movie',
   year: props.initialData?.year || (undefined as number | undefined),
   director: props.initialData?.director || '',
+  actors: props.initialData?.actors || '',
+  genres: (() => {
+    const g = props.initialData?.genres;
+    if (Array.isArray(g)) return g;
+    if (typeof g === 'string') {
+      try {
+        return JSON.parse(g);
+      } catch {
+        return g ? [g] : [];
+      }
+    }
+    return [];
+  })() as string[],
   rating: props.initialData?.rating || 0,
+  summary: props.initialData?.summary || '',
   review: props.initialData?.review || '',
+  runtime: props.initialData?.runtime || (undefined as number | undefined),
+  release_date: props.initialData?.release_date || '',
+  imdb_id: props.initialData?.imdb_id || '',
   status: props.initialData?.status || 'wishlist',
   current_season: props.initialData?.current_season || 1,
   current_episode: props.initialData?.current_episode || 0,
@@ -38,11 +56,18 @@ function onSubmit() {
   if (!validate()) return;
   emit('submit', {
     title: form.title.trim(),
+    original_title: form.original_title?.trim() || undefined,
     type: form.type,
     year: form.year || undefined,
-    director: form.director.trim() || undefined,
+    director: form.director?.trim() || undefined,
+    actors: form.actors?.trim() || undefined,
+    genres: form.genres.length > 0 ? form.genres : undefined,
     rating: form.rating || undefined,
-    review: form.review.trim() || undefined,
+    summary: form.summary?.trim() || undefined,
+    review: form.review?.trim() || undefined,
+    runtime: form.runtime || undefined,
+    release_date: form.release_date || undefined,
+    imdb_id: form.imdb_id?.trim() || undefined,
     status: form.status,
     current_season: form.current_season,
     current_episode: form.current_episode,
@@ -92,6 +117,9 @@ const showSearch = ref(!props.isEdit);
         "
         style="background-color: var(--color-surface); color: var(--color-text)"
       />
+      <p v-if="form.original_title" class="mt-1 text-xs text-[var(--color-text-secondary)]">
+        原名：{{ form.original_title }}
+      </p>
     </div>
 
     <!-- Type + Year + Director -->
@@ -118,6 +146,89 @@ const showSearch = ref(!props.isEdit);
           style="background-color: var(--color-surface); color: var(--color-text)"
         />
       </div>
+    </div>
+
+    <!-- Genres + Actors -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">类型标签</label>
+        <div class="flex flex-wrap gap-1.5">
+          <span
+            v-for="g in form.genres"
+            :key="g"
+            class="inline-flex items-center gap-0.5 rounded-full bg-[var(--color-bg)] px-2.5 py-0.5 text-xs text-[var(--color-text-secondary)]"
+          >
+            {{ g }}
+            <button
+              type="button"
+              class="ml-0.5 text-[var(--color-text-secondary)] hover:text-red-500"
+              @click="form.genres = form.genres.filter((x) => x !== g)"
+            >
+              &times;
+            </button>
+          </span>
+          <span v-if="form.genres.length === 0" class="text-xs text-[var(--color-text-secondary)]"
+            >—</span
+          >
+        </div>
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">主演</label>
+        <input
+          v-model="form.actors"
+          type="text"
+          placeholder="多个用、分隔"
+          class="focus:border-primary-500 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm focus:outline-none"
+          style="background-color: var(--color-surface); color: var(--color-text)"
+        />
+      </div>
+    </div>
+
+    <!-- Runtime + Release + IMDB -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]"
+          >片长（分钟）</label
+        >
+        <input
+          v-model.number="form.runtime"
+          type="number"
+          min="1"
+          class="w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm"
+          style="background-color: var(--color-surface); color: var(--color-text)"
+        />
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">上映日期</label>
+        <input
+          v-model="form.release_date"
+          type="date"
+          class="w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm"
+          style="background-color: var(--color-surface); color: var(--color-text)"
+        />
+      </div>
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">IMDB</label>
+        <input
+          v-model="form.imdb_id"
+          type="text"
+          placeholder="tt0111161"
+          class="w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm"
+          style="background-color: var(--color-surface); color: var(--color-text)"
+        />
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div>
+      <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">简介</label>
+      <textarea
+        v-model="form.summary"
+        rows="3"
+        placeholder="剧情简介..."
+        class="focus:border-primary-500 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm focus:outline-none"
+        style="background-color: var(--color-surface); color: var(--color-text)"
+      />
     </div>
 
     <!-- Rating + Status -->

@@ -26,7 +26,19 @@ const showDeleteConfirm = ref(false);
       </div>
       <div>
         <h1 class="text-2xl font-bold text-[var(--color-text)]">{{ book.title }}</h1>
+        <p v-if="book.original_title" class="text-sm text-[var(--color-text-secondary)]">
+          {{ book.original_title }}
+        </p>
         <p class="mt-1 text-[var(--color-text-secondary)]">{{ book.author || '' }}</p>
+        <div
+          class="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[var(--color-text-secondary)]"
+        >
+          <span v-if="book.publisher">{{ book.publisher }}</span>
+          <span v-if="book.publish_year">{{ book.publish_year }}</span>
+          <span v-if="book.isbn">ISBN {{ book.isbn }}</span>
+          <span v-if="book.price">{{ book.price }}</span>
+          <span v-if="book.series">丛书：{{ book.series }}</span>
+        </div>
         <div class="mt-3 flex flex-wrap gap-1.5">
           <StatusBadge :label="getLabel('book_type', book.type)" />
           <StatusBadge :label="getLabel('book_status', book.status)" />
@@ -40,9 +52,19 @@ const showDeleteConfirm = ref(false);
       </div>
     </div>
     <div
+      v-if="book.summary"
+      class="mb-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
+    >
+      <h3 class="mb-1 text-xs font-medium text-[var(--color-text-secondary)]">简介</h3>
+      <p class="text-sm leading-relaxed whitespace-pre-wrap text-[var(--color-text-secondary)]">
+        {{ book.summary }}
+      </p>
+    </div>
+    <div
       v-if="book.review"
       class="mb-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
     >
+      <h3 class="mb-1 text-xs font-medium text-[var(--color-text-secondary)]">短评</h3>
       <p class="text-sm leading-relaxed whitespace-pre-wrap text-[var(--color-text-secondary)]">
         {{ book.review }}
       </p>

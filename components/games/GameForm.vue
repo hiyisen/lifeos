@@ -31,7 +31,7 @@ function onSubmit() {
     platform: form.platform,
     genre: form.genre || undefined,
     rating: form.rating || undefined,
-    review: form.review.trim() || undefined,
+    review: form.review?.trim() || undefined,
     status: form.status,
     play_hours: form.play_hours,
     year: form.year || undefined,
