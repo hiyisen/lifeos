@@ -3,10 +3,16 @@ import { getDb } from '../../utils/db';
 export default defineEventHandler(async (event) => {
   const body = await readBody<{
     title: string;
+    original_title?: string;
     author?: string;
     isbn?: string;
+    publisher?: string;
+    publish_year?: number;
+    price?: string;
+    series?: string;
     type?: string;
     rating?: number;
+    summary?: string;
     review?: string;
     cover_path?: string;
     source_id?: string;
@@ -20,13 +26,19 @@ export default defineEventHandler(async (event) => {
 
   const db = getDb();
   const result = db.run(
-    `INSERT INTO books (title, author, isbn, type, rating, review, cover_path, source_id, source_url, status, page_count, current_page)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO books (title, original_title, author, isbn, publisher, publish_year, price, series, type, rating, summary, review, cover_path, source_id, source_url, status, page_count, current_page)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     body.title,
+    body.original_title || null,
     body.author || null,
     body.isbn || null,
+    body.publisher || null,
+    body.publish_year || null,
+    body.price || null,
+    body.series || null,
     body.type || 'paper',
     body.rating || null,
+    body.summary || null,
     body.review || null,
     body.cover_path || null,
     body.source_id || null,

@@ -6,8 +6,15 @@ export default defineEventHandler(async (event) => {
     type: string;
     year?: number;
     director?: string;
+    actors?: string;
+    genres?: string[];
+    original_title?: string;
     rating?: number;
+    summary?: string;
     review?: string;
+    runtime?: number;
+    release_date?: string;
+    imdb_id?: string;
     poster_path?: string;
     source_id?: string;
     source_url?: string;
@@ -22,14 +29,21 @@ export default defineEventHandler(async (event) => {
 
   const db = getDb();
   const result = db.run(
-    `INSERT INTO media (title, type, year, director, rating, review, poster_path, source_id, source_url, status, current_season, current_episode, total_episodes)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO media (title, type, year, director, actors, genres, original_title, rating, summary, review, runtime, release_date, imdb_id, poster_path, source_id, source_url, status, current_season, current_episode, total_episodes)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     body.title,
     body.type,
     body.year || null,
     body.director || null,
+    body.actors || null,
+    JSON.stringify(body.genres || []),
+    body.original_title || null,
     body.rating || null,
+    body.summary || null,
     body.review || null,
+    body.runtime || null,
+    body.release_date || null,
+    body.imdb_id || null,
     body.poster_path || null,
     body.source_id || null,
     body.source_url || null,
