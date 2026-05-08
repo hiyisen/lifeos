@@ -65,7 +65,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
         />
         <button
           v-if="editable"
-          class="absolute top-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white hover:bg-red-600 active:bg-red-700 transition-colors"
+          class="absolute top-1 right-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-red-600 active:bg-red-700"
           @click.stop="emit('delete', index)"
         >
           <X class="h-4 w-4" />

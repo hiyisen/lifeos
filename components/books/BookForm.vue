@@ -15,6 +15,9 @@ const form = reactive({
   status: props.initialData?.status || 'wishlist',
   page_count: props.initialData?.page_count || (undefined as number | undefined),
   current_page: props.initialData?.current_page || 0,
+  cover_path: props.initialData?.cover_path || '',
+  source_id: props.initialData?.source_id || '',
+  source_url: props.initialData?.source_url || '',
 });
 
 const errors = reactive<{ title?: string }>({});
@@ -37,12 +40,35 @@ function onSubmit() {
     status: form.status,
     page_count: form.page_count || undefined,
     current_page: form.current_page,
+    cover_path: form.cover_path || undefined,
+    source_id: form.source_id || undefined,
+    source_url: form.source_url || undefined,
   });
 }
+
+const showSearch = ref(!props.isEdit);
 </script>
 
 <template>
   <form class="space-y-5" @submit.prevent="onSubmit">
+    <!-- External search (add mode only) -->
+    <div v-if="!isEdit && showSearch">
+      <BookSearch
+        @select="
+          (item) => {
+            Object.assign(form, item);
+            showSearch = false;
+          }
+        "
+      />
+      <p class="mt-2 text-xs text-[var(--color-text-secondary)]">
+        或
+        <button type="button" class="text-primary-600 hover:underline" @click="showSearch = false">
+          手动输入
+        </button>
+      </p>
+    </div>
+
     <div>
       <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]"
         >书名 <span class="text-red-500">*</span></label
