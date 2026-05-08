@@ -11,13 +11,17 @@ const MIN_INTERVAL = 1500;
 
 // Shared session bid — rotate on each request but keep consistent across fetch calls
 function generateBid(): string {
-  return Array.from({ length: 11 }, () => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]).join('');
+  return Array.from(
+    { length: 11 },
+    () => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)],
+  ).join('');
 }
 
 let sessionBid = generateBid();
 
 const BASE_HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+  'User-Agent':
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
   'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
 };
 

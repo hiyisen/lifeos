@@ -16,15 +16,14 @@ export default defineEventHandler(async (event) => {
     if (sourceId.startsWith('ol:')) {
       try {
         const olKey = sourceId.replace('ol:', '');
-        const olData = await $fetch<Record<string, any>>(
-          `https://openlibrary.org${olKey}.json`,
-        );
+        const olData = await $fetch<Record<string, any>>(`https://openlibrary.org${olKey}.json`);
         if (olData) {
           return {
             success: true,
             data: {
               rating: undefined,
-              summary: (olData.description as string)?.split('---')[0]?.trim()?.slice(0, 500) || undefined,
+              summary:
+                (olData.description as string)?.split('---')[0]?.trim()?.slice(0, 500) || undefined,
               author: olData.authors
                 ? await Promise.all(
                     olData.authors.slice(0, 3).map(async (a: any) => {

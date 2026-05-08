@@ -139,7 +139,11 @@ onMounted(async () => {
               {{ getLabel('expense_category', exp.category) }}
             </p>
             <p class="text-xs text-[var(--color-text-secondary)]">
-              {{ exp.record_date }}<span v-if="exp.note"> · {{ exp.note }}</span>
+              {{ exp.record_date }}
+              <span v-if="exp.payment_method">
+                · {{ getLabel('payment_method', exp.payment_method) }}</span
+              >
+              <span v-if="exp.note"> · {{ exp.note }}</span>
             </p>
           </div>
         </div>

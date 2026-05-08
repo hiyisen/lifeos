@@ -42,6 +42,12 @@ function cycleStatus(task: Record<string, any>) {
       >
         {{ task.title }}
       </p>
+      <p
+        v-if="task.description"
+        class="mt-0.5 line-clamp-1 text-xs text-[var(--color-text-secondary)]"
+      >
+        {{ task.description }}
+      </p>
       <div class="mt-1 flex flex-wrap items-center gap-1.5 text-xs">
         <span
           class="flex items-center gap-0.5 text-[var(--color-text-secondary)]"
@@ -52,6 +58,11 @@ function cycleStatus(task: Record<string, any>) {
           v-if="task.due_date"
           class="inline-flex items-center gap-0.5 text-[var(--color-text-secondary)]"
           ><Calendar class="h-3 w-3" />{{ task.due_date }}</span
+        >
+        <span
+          v-if="task.is_recurring"
+          class="inline-flex items-center gap-0.5 text-[var(--color-text-secondary)]"
+          >🔄</span
         >
         <StatusBadge
           v-if="task.category"

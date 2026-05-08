@@ -5,6 +5,7 @@ const props = defineProps<{
     name: string;
     restaurant?: string | null;
     cuisine_tag?: string | null;
+    address?: string | null;
     rating?: number | null;
     price?: number | null;
     photo_paths: string[];
@@ -66,6 +67,13 @@ const coverPhoto = computed(() =>
           ¥{{ food.price }}/人
         </span>
       </div>
+
+      <p v-if="food.address" class="mt-1 line-clamp-1 text-xs text-[var(--color-text-secondary)]">
+        {{ food.address }}
+      </p>
+      <p v-if="food.note" class="mt-0.5 line-clamp-1 text-xs text-[var(--color-text-secondary)]">
+        {{ food.note }}
+      </p>
 
       <div class="mt-2 text-xs text-[var(--color-text-secondary)]">
         {{ food.visited_at }}

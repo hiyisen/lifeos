@@ -20,7 +20,10 @@ async function onSelect(item: any) {
 
   loadingDetail.value = item.source_id;
   try {
-    const res = await api.get('/api/search/book-detail', { id: doubanId, source_id: item.source_id });
+    const res = await api.get('/api/search/book-detail', {
+      id: doubanId,
+      source_id: item.source_id,
+    });
     if (res.success && res.data) {
       const d = res.data;
       emit('select', {

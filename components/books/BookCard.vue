@@ -25,14 +25,28 @@ if (!loaded.value) load();
         <BookOpen class="h-6 w-6 text-[var(--color-text-secondary)]" />
       </div>
     </div>
-    <div class="flex flex-1 flex-col justify-between">
+    <div class="flex min-w-0 flex-1 flex-col justify-between">
       <div>
         <h3 class="line-clamp-1 font-semibold text-[var(--color-text)]">{{ book.title }}</h3>
+        <p
+          v-if="book.original_title && book.original_title !== book.title"
+          class="mt-0.5 line-clamp-1 text-xs text-[var(--color-text-secondary)]"
+        >
+          {{ book.original_title }}
+        </p>
         <p class="mt-0.5 text-xs text-[var(--color-text-secondary)]">
-          {{ book.author || '' }}<span v-if="book.page_count"> · {{ book.page_count }}页</span>
+          <span v-if="book.author">{{ book.author }}</span>
+          <span v-if="book.page_count"> · {{ book.page_count }}页</span>
+          <span v-if="book.publisher"> · {{ book.publisher }}</span>
+        </p>
+        <p
+          v-if="book.series"
+          class="mt-0.5 line-clamp-1 text-[10px] text-[var(--color-text-secondary)]"
+        >
+          丛书：{{ book.series }}
         </p>
       </div>
-      <div class="flex items-center gap-1.5">
+      <div class="mt-1.5 flex items-center gap-1.5">
         <StatusBadge :label="getLabel('book_type', book.type)" size="sm" />
         <StatusBadge :label="getLabel('book_status', book.status)" size="sm" />
         <RatingStars v-if="book.rating" :model-value="book.rating" readonly size="sm" />

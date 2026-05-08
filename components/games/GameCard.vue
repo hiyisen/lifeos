@@ -24,15 +24,17 @@ const { getLabel } = useDict();
         <Gamepad2 class="h-6 w-6 text-[var(--color-text-secondary)]" />
       </div>
     </div>
-    <div class="flex flex-1 flex-col justify-between">
+    <div class="flex min-w-0 flex-1 flex-col justify-between">
       <div>
         <h3 class="line-clamp-1 font-semibold text-[var(--color-text)]">{{ game.title }}</h3>
         <p class="mt-0.5 text-xs text-[var(--color-text-secondary)]">
-          {{ getLabel('platform', game.platform) }}<span v-if="game.year"> · {{ game.year }}</span>
+          <span>{{ getLabel('platform', game.platform) }}</span>
+          <span v-if="game.year"> · {{ game.year }}</span>
+          <span v-if="game.genre"> · {{ game.genre }}</span>
+          <span v-if="game.play_hours"> · {{ game.play_hours }}小时</span>
         </p>
       </div>
-      <div class="flex items-center gap-1.5">
-        <StatusBadge :label="getLabel('platform', game.platform)" size="sm" />
+      <div class="mt-1.5 flex items-center gap-1.5">
         <StatusBadge :label="getLabel('game_status', game.status)" size="sm" />
         <RatingStars v-if="game.rating" :model-value="game.rating" readonly size="sm" />
       </div>

@@ -1,18 +1,7 @@
 <script setup lang="ts">
 import { Clapperboard } from 'lucide-vue-next';
 
-defineProps<{
-  media: {
-    id: number;
-    title: string;
-    type: string;
-    year?: number | null;
-    director?: string | null;
-    rating?: number | null;
-    poster_path?: string | null;
-    status: string;
-  };
-}>();
+defineProps<{ media: Record<string, any> }>();
 
 const { getLabel, getColor, loaded, load } = useDict();
 if (!loaded.value) load();
@@ -25,6 +14,19 @@ function typeColor(code: string) {
 }
 function statusLabel(code: string) {
   return getLabel('media_status', code);
+}
+
+function parseGenres(genres: any): string[] {
+  if (!genres) return [];
+  if (Array.isArray(genres)) return genres;
+  if (typeof genres === 'string') {
+    try {
+      return JSON.parse(genres);
+    } catch {
+      return [];
+    }
+  }
+  return [];
 }
 </script>
 
@@ -47,15 +49,30 @@ function statusLabel(code: string) {
         <Clapperboard class="h-6 w-6 text-[var(--color-text-secondary)]" />
       </div>
     </div>
-    <div class="flex flex-1 flex-col justify-between">
+    <div class="flex min-w-0 flex-1 flex-col justify-between">
       <div>
         <h3 class="line-clamp-1 font-semibold text-[var(--color-text)]">{{ media.title }}</h3>
-        <p class="mt-0.5 text-xs text-[var(--color-text-secondary)]">
-          {{ media.year || '' }}
-          <span v-if="media.director">· {{ media.director }}</span>
+        <p
+          v-if="media.original_title && media.original_title !== media.title"
+          class="mt-0.5 line-clamp-1 text-xs text-[var(--color-text-secondary)]"
+        >
+          {{ media.original_title }}
         </p>
+        <p class="mt-0.5 text-xs text-[var(--color-text-secondary)]">
+          <span v-if="media.year">{{ media.year }}</span>
+          <span v-if="media.director"> · {{ media.director }}</span>
+          <span v-if="media.runtime"> · {{ media.runtime }}分钟</span>
+        </p>
+        <div v-if="parseGenres(media.genres).length > 0" class="mt-1 flex flex-wrap gap-1">
+          <span
+            v-for="g in parseGenres(media.genres).slice(0, 3)"
+            :key="g"
+            class="rounded-full bg-[var(--color-bg)] px-1.5 py-0.5 text-[10px] text-[var(--color-text-secondary)]"
+            >{{ g }}</span
+          >
+        </div>
       </div>
-      <div class="flex items-center gap-1.5">
+      <div class="mt-1.5 flex items-center gap-1.5">
         <StatusBadge :label="typeLabel(media.type)" :color="typeColor(media.type)" size="sm" />
         <StatusBadge :label="statusLabel(media.status)" size="sm" />
         <RatingStars v-if="media.rating" :model-value="media.rating" readonly size="sm" />
