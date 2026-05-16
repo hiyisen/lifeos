@@ -78,27 +78,58 @@ function onSubmit() {
   });
 }
 
-const showSearch = ref(!props.isEdit);
+const showSearch = ref(false);
+
+function fillFromSearch(item: Record<string, any>) {
+  // Only fill fields that are currently empty (safe for both add and edit mode)
+  if (!form.title || form.title === (props.initialData?.title || ''))
+    form.title = item.title || form.title;
+  if (!form.original_title) form.original_title = item.original_title || '';
+  if (!form.year) form.year = item.year || undefined;
+  if (!form.director) form.director = item.director || '';
+  if (!form.actors) form.actors = item.actors || '';
+  if (form.genres.length === 0 && item.genres?.length > 0) form.genres = item.genres;
+  if (!form.rating) form.rating = item.rating || 0;
+  if (!form.summary) form.summary = item.summary || '';
+  if (!form.runtime) form.runtime = item.runtime || undefined;
+  if (!form.release_date) form.release_date = item.release_date || '';
+  if (!form.imdb_id) form.imdb_id = item.imdb_id || '';
+  if (!form.poster_path) form.poster_path = item.poster_path || '';
+  if (!form.source_id) form.source_id = item.source_id || '';
+  if (!form.source_url) form.source_url = item.source_url || '';
+  showSearch.value = false;
+}
 </script>
 
 <template>
   <form class="space-y-5" @submit.prevent="onSubmit">
-    <!-- External search (add mode only) -->
-    <div v-if="!isEdit && showSearch">
-      <MediaSearch
-        @select="
-          (item) => {
-            Object.assign(form, item);
-            showSearch = false;
-          }
-        "
-      />
+    <!-- Poster preview -->
+    <div v-if="form.poster_path" class="flex justify-center">
+      <div
+        class="h-48 w-32 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]"
+      >
+        <img :src="form.poster_path" alt="海报" class="h-full w-full object-cover" />
+      </div>
+    </div>
+
+    <!-- External search -->
+    <div v-if="showSearch">
+      <MediaSearch @select="fillFromSearch" />
       <p class="mt-2 text-xs text-[var(--color-text-secondary)]">
         或
         <button type="button" class="text-primary-600 hover:underline" @click="showSearch = false">
           手动输入
         </button>
       </p>
+    </div>
+    <div v-else>
+      <button
+        type="button"
+        class="text-primary-600 inline-flex items-center gap-1 text-sm hover:underline"
+        @click="showSearch = true"
+      >
+        🔍 搜索豆瓣
+      </button>
     </div>
 
     <!-- Title -->

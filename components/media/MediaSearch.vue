@@ -76,9 +76,12 @@ async function onSelect(item: any) {
 function emitSelect(item: any) {
   emit('select', {
     title: getTitle(item),
+    original_title: item.original_title || undefined,
     type: item.type,
     year: item.year || undefined,
     rating: item.rating || undefined,
+    director: item.director || undefined,
+    summary: item.summary || '',
     poster_path: item.poster || undefined,
     source_id: item.source_id,
     source_url: item.source_url,
