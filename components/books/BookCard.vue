@@ -3,6 +3,7 @@ import { BookOpen } from 'lucide-vue-next';
 
 defineProps<{ book: Record<string, any> }>();
 const { getLabel, loaded, load } = useDict();
+const { proxyUrl } = useImageProxy();
 if (!loaded.value) load();
 </script>
 
@@ -16,7 +17,7 @@ if (!loaded.value) load();
     >
       <img
         v-if="book.cover_path"
-        :src="book.cover_path"
+        :src="proxyUrl(book.cover_path)"
         :alt="book.title"
         class="h-full w-full object-cover"
         loading="lazy"

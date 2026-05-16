@@ -4,6 +4,7 @@ import { Pencil, Trash2, BookOpen } from 'lucide-vue-next';
 defineProps<{ book: Record<string, any> }>();
 defineEmits<{ edit: [id: number]; delete: [id: number] }>();
 const { getLabel, loaded, load } = useDict();
+const { proxyUrl } = useImageProxy();
 if (!loaded.value) load();
 const showDeleteConfirm = ref(false);
 </script>
@@ -16,7 +17,7 @@ const showDeleteConfirm = ref(false);
       >
         <img
           v-if="book.cover_path"
-          :src="book.cover_path"
+          :src="proxyUrl(book.cover_path)"
           :alt="book.title"
           class="h-full w-full object-cover"
         />

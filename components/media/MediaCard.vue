@@ -4,6 +4,7 @@ import { Clapperboard } from 'lucide-vue-next';
 defineProps<{ media: Record<string, any> }>();
 
 const { getLabel, getColor, loaded, load } = useDict();
+const { proxyUrl } = useImageProxy();
 if (!loaded.value) load();
 
 function typeLabel(code: string) {
@@ -40,7 +41,7 @@ function parseGenres(genres: any): string[] {
     >
       <img
         v-if="media.poster_path"
-        :src="media.poster_path"
+        :src="proxyUrl(media.poster_path)"
         :alt="media.title"
         class="h-full w-full object-cover"
         loading="lazy"

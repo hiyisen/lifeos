@@ -3,6 +3,7 @@ import { Gamepad2 } from 'lucide-vue-next';
 
 defineProps<{ game: Record<string, any> }>();
 const { getLabel } = useDict();
+const { proxyUrl } = useImageProxy();
 </script>
 
 <template>
@@ -15,7 +16,7 @@ const { getLabel } = useDict();
     >
       <img
         v-if="game.cover_path"
-        :src="game.cover_path"
+        :src="proxyUrl(game.cover_path)"
         :alt="game.title"
         class="h-full w-full object-cover"
         loading="lazy"

@@ -1,4 +1,5 @@
 import { getDb } from '../../utils/db';
+import { savePhotoFromUrl } from '../../utils/photo';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{
@@ -26,6 +27,11 @@ export default defineEventHandler(async (event) => {
 
   if (!body.title || !body.type)
     throw createError({ statusCode: 400, message: 'title and type are required' });
+
+  // Download poster to local storage if it's an external URL
+  if (body.poster_path && /^https?:\/\//.test(body.poster_path)) {
+    body.poster_path = await savePhotoFromUrl(body.poster_path, 'media');
+  }
 
   const db = getDb();
   const result = db.run(

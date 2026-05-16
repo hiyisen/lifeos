@@ -18,6 +18,7 @@ const genreList = computed(() => {
 });
 
 const { getLabel, getColor, loaded, load } = useDict();
+const { proxyUrl } = useImageProxy();
 if (!loaded.value) load();
 
 const showDeleteConfirm = ref(false);
@@ -31,7 +32,7 @@ const showDeleteConfirm = ref(false);
       >
         <img
           v-if="media.poster_path"
-          :src="media.poster_path"
+          :src="proxyUrl(media.poster_path)"
           :alt="media.title"
           class="h-full w-full object-cover"
         />

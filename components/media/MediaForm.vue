@@ -8,6 +8,8 @@ const props = withDefaults(
   { loading: false, isEdit: false },
 );
 
+const { proxyUrl } = useImageProxy();
+
 const emit = defineEmits<{ submit: [data: Record<string, any>]; cancel: [] }>();
 
 const form = reactive({
@@ -108,7 +110,7 @@ function fillFromSearch(item: Record<string, any>) {
       <div
         class="h-48 w-32 overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)]"
       >
-        <img :src="form.poster_path" alt="海报" class="h-full w-full object-cover" />
+        <img :src="proxyUrl(form.poster_path)" alt="海报" class="h-full w-full object-cover" />
       </div>
     </div>
 

@@ -51,3 +51,33 @@ export function deletePhotos(paths: string[]): void {
     deletePhoto(path);
   }
 }
+
+/**
+ * 从远程URL下载图片并保存到本地
+ * 用于解决豆瓣等外部图片的防盗链问题
+ * @param url 远程图片URL
+ * @param module 所属模块
+ * @returns 本地访问路径，失败时返回原URL
+ */
+export async function savePhotoFromUrl(url: string, module: string): Promise<string> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        Referer: 'https://movie.douban.com/',
+      },
+    });
+    if (!response.ok) return url;
+    const buffer = Buffer.from(await response.arrayBuffer());
+    const urlPath = new URL(url).pathname;
+    const ext = extname(urlPath) || '.jpg';
+    const dir = join(PHOTOS_DIR, module);
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    const filename = `${randomUUID()}${ext}`;
+    writeFileSync(join(dir, filename), buffer);
+    return `/photos/${module}/${filename}`;
+  } catch {
+    return url;
+  }
+}

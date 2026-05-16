@@ -4,6 +4,7 @@ import { Pencil, Trash2, Gamepad2 } from 'lucide-vue-next';
 defineProps<{ game: Record<string, any> }>();
 defineEmits<{ edit: [id: number]; delete: [id: number] }>();
 const { getLabel } = useDict();
+const { proxyUrl } = useImageProxy();
 const showDeleteConfirm = ref(false);
 </script>
 
@@ -15,7 +16,7 @@ const showDeleteConfirm = ref(false);
       >
         <img
           v-if="game.cover_path"
-          :src="game.cover_path"
+          :src="proxyUrl(game.cover_path)"
           :alt="game.title"
           class="h-full w-full object-cover"
         />

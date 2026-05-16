@@ -3,6 +3,7 @@ import { Search } from 'lucide-vue-next';
 
 const { query, results, loading, fetched, search } = useSearch('books');
 const api = useApi();
+const { proxyUrl } = useImageProxy();
 const loadingDetail = ref<string | null>(null);
 
 const emit = defineEmits<{
@@ -117,7 +118,7 @@ function onSubmit() {
       >
         <img
           v-if="item.cover"
-          :src="item.cover"
+          :src="proxyUrl(item.cover)"
           class="h-16 w-12 shrink-0 rounded object-cover"
           loading="lazy"
         />
