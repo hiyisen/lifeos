@@ -17,6 +17,38 @@ onMounted(async () => {
   <div>
     <h1 class="mb-6 text-xl font-bold text-[var(--color-text)]">仪表盘</h1>
 
+    <!-- Quick actions -->
+    <div class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <NuxtLink
+        to="/foods/add"
+        class="flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3.5 text-sm font-medium text-[var(--color-text)] transition-all hover:-translate-y-0.5 hover:shadow-md"
+      >
+        <span class="text-xl">🍜</span>
+        记录美食
+      </NuxtLink>
+      <NuxtLink
+        to="/expenses/add"
+        class="flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3.5 text-sm font-medium text-[var(--color-text)] transition-all hover:-translate-y-0.5 hover:shadow-md"
+      >
+        <span class="text-xl">💸</span>
+        记一笔
+      </NuxtLink>
+      <NuxtLink
+        to="/media/add"
+        class="flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3.5 text-sm font-medium text-[var(--color-text)] transition-all hover:-translate-y-0.5 hover:shadow-md"
+      >
+        <span class="text-xl">🎬</span>
+        添加影视
+      </NuxtLink>
+      <NuxtLink
+        to="/books/add"
+        class="flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3.5 text-sm font-medium text-[var(--color-text)] transition-all hover:-translate-y-0.5 hover:shadow-md"
+      >
+        <span class="text-xl">📖</span>
+        添加书籍
+      </NuxtLink>
+    </div>
+
     <div v-if="loading" class="flex justify-center py-16">
       <div
         class="border-primary-600 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent"
