@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   }
 
   db.run(
-    `UPDATE media SET title=?, type=?, year=?, director=?, actors=?, genres=?, original_title=?, rating=?, summary=?, review=?, runtime=?, release_date=?, imdb_id=?, poster_path=?, source_id=?, source_url=?, status=?, current_season=?, current_episode=?, total_episodes=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`,
+    `UPDATE media SET title=?, type=?, year=?, director=?, actors=?, genres=?, original_title=?, rating=?, summary=?, review=?, runtime=?, release_date=?, imdb_id=?, poster_path=?, source_id=?, source_url=?, status=?, current_season=?, current_episode=?, total_episodes=?, viewed_at=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`,
     body.title,
     body.type,
     body.year || null,
@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
     body.current_season || 1,
     body.current_episode || 0,
     body.total_episodes || null,
+    body.viewed_at || null,
     id,
   );
   return { success: true, data: db.get('SELECT * FROM media WHERE id = ?', id) };

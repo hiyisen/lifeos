@@ -36,6 +36,7 @@ const form = reactive({
   review: props.initialData?.review || '',
   runtime: props.initialData?.runtime || (undefined as number | undefined),
   release_date: props.initialData?.release_date || '',
+  viewed_at: props.initialData?.viewed_at || '',
   imdb_id: props.initialData?.imdb_id || '',
   status: props.initialData?.status || 'wishlist',
   current_season: props.initialData?.current_season || 1,
@@ -69,6 +70,7 @@ function onSubmit() {
     review: form.review?.trim() || undefined,
     runtime: form.runtime || undefined,
     release_date: form.release_date || undefined,
+    viewed_at: form.viewed_at || undefined,
     imdb_id: form.imdb_id?.trim() || undefined,
     status: form.status,
     current_season: form.current_season,
@@ -217,8 +219,8 @@ function fillFromSearch(item: Record<string, any>) {
       </div>
     </div>
 
-    <!-- Runtime + Release + IMDB -->
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <!-- Runtime + IMDB -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]"
           >片长（分钟）</label
@@ -232,6 +234,19 @@ function fillFromSearch(item: Record<string, any>) {
         />
       </div>
       <div>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">IMDB</label>
+        <input
+          v-model="form.imdb_id"
+          type="text"
+          placeholder="tt0111161"
+          class="w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm"
+          style="background-color: var(--color-surface); color: var(--color-text)"
+        />
+      </div>
+    </div>
+    <!-- Release + Viewed At -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
         <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">上映日期</label>
         <input
           v-model="form.release_date"
@@ -241,11 +256,10 @@ function fillFromSearch(item: Record<string, any>) {
         />
       </div>
       <div>
-        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">IMDB</label>
+        <label class="mb-1.5 block text-sm font-medium text-[var(--color-text)]">观影日期</label>
         <input
-          v-model="form.imdb_id"
-          type="text"
-          placeholder="tt0111161"
+          v-model="form.viewed_at"
+          type="date"
           class="w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm"
           style="background-color: var(--color-surface); color: var(--color-text)"
         />

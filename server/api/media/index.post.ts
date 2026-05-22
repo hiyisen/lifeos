@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
     current_season?: number;
     current_episode?: number;
     total_episodes?: number;
+    viewed_at?: string;
   }>(event);
 
   if (!body.title || !body.type)
@@ -35,8 +36,8 @@ export default defineEventHandler(async (event) => {
 
   const db = getDb();
   const result = db.run(
-    `INSERT INTO media (title, type, year, director, actors, genres, original_title, rating, summary, review, runtime, release_date, imdb_id, poster_path, source_id, source_url, status, current_season, current_episode, total_episodes)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO media (title, type, year, director, actors, genres, original_title, rating, summary, review, runtime, release_date, imdb_id, poster_path, source_id, source_url, status, current_season, current_episode, total_episodes, viewed_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     body.title,
     body.type,
     body.year || null,
@@ -57,6 +58,7 @@ export default defineEventHandler(async (event) => {
     body.current_season || 1,
     body.current_episode || 0,
     body.total_episodes || null,
+    body.viewed_at || null,
   );
   const media = db.get('SELECT * FROM media WHERE id = ?', result.lastInsertRowid);
   return { success: true, data: media };

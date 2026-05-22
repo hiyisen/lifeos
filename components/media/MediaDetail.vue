@@ -57,7 +57,8 @@ const showDeleteConfirm = ref(false);
             class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--color-text-secondary)]"
           >
             <span v-if="media.runtime">片长 {{ media.runtime }} 分钟</span>
-            <span v-if="media.release_date">{{ media.release_date }}</span>
+            <span v-if="media.release_date">上映 {{ media.release_date }}</span>
+            <span v-if="media.viewed_at" class="font-medium text-[var(--color-text)]">观影 {{ media.viewed_at }}</span>
             <a
               v-if="media.imdb_id"
               :href="`https://www.imdb.com/title/${media.imdb_id}`"

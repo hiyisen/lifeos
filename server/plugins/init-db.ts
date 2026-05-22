@@ -82,9 +82,19 @@ export default defineNitroPlugin(() => {
     current_season  INTEGER DEFAULT 1,            -- 当前季数
     current_episode INTEGER DEFAULT 0,            -- 当前集数
     total_episodes  INTEGER,                      -- 总集数
+    viewed_at       TEXT,                         -- 观影日期
     created_at      DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at      DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
+  // Migration: add columns that may be missing in older databases
+  try { db.run('ALTER TABLE media ADD COLUMN genres TEXT'); } catch (_) { /* already exists */ }
+  try { db.run('ALTER TABLE media ADD COLUMN actors TEXT'); } catch (_) { /* already exists */ }
+  try { db.run('ALTER TABLE media ADD COLUMN original_title TEXT'); } catch (_) { /* already exists */ }
+  try { db.run('ALTER TABLE media ADD COLUMN runtime INTEGER'); } catch (_) { /* already exists */ }
+  try { db.run('ALTER TABLE media ADD COLUMN release_date TEXT'); } catch (_) { /* already exists */ }
+  try { db.run('ALTER TABLE media ADD COLUMN imdb_id TEXT'); } catch (_) { /* already exists */ }
+  try { db.run('ALTER TABLE media ADD COLUMN summary TEXT'); } catch (_) { /* already exists */ }
+  try { db.run('ALTER TABLE media ADD COLUMN viewed_at TEXT'); } catch (_) { /* already exists */ }
 
   /**
    * 游戏记录表
