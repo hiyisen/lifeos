@@ -7,8 +7,6 @@
 import { getAllDicts } from '../../utils/dict';
 
 export default defineEventHandler(() => {
-  // 获取所有字典类别和条目数据
   const data = getAllDicts();
-  // 返回成功的响应和完整的字典数据
   return { success: true, data };
 });
