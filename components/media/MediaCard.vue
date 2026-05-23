@@ -64,6 +64,12 @@ function parseGenres(genres: any): string[] {
           <span v-if="media.director"> · {{ media.director }}</span>
           <span v-if="media.runtime"> · {{ media.runtime }}分钟</span>
         </p>
+        <p
+          v-if="media.viewed_at"
+          class="mt-0.5 text-xs font-medium text-[var(--color-text)]"
+        >
+          观影 {{ media.viewed_at }}
+        </p>
         <div v-if="parseGenres(media.genres).length > 0" class="mt-1 flex flex-wrap gap-1">
           <span
             v-for="g in parseGenres(media.genres).slice(0, 3)"
