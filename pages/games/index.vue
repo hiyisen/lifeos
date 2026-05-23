@@ -1,49 +1,52 @@
 <script setup lang="ts">
 import { Gamepad2, Filter, X } from 'lucide-vue-next';
+
 const api = useApi();
 const { loaded, load } = useDict();
-const games = ref<any[]>([]);
-const loading = ref(true);
-const total = ref(0);
-const page = ref(1);
-const limit = 20;
-const totalPages = computed(() => Math.ceil(total.value / limit));
+
 const search = ref('');
 const platform = ref('');
 const status = ref('');
 const showFilters = ref(false);
 
-async function fetch() {
-  loading.value = true;
-  const res = await api.get('/api/games', {
-    page: page.value,
-    limit,
-    search: search.value || undefined,
-    platform: platform.value || undefined,
-    status: status.value || undefined,
+const sortOptions = [
+  { value: 'created_at', label: '最近添加' },
+  { value: 'rating', label: '评分最高' },
+  { value: 'play_hours', label: '游玩时长' },
+];
+
+const { items: games, loading, initialLoading, hasMore, sort, setSort, sentinel, fetch, reset } =
+  useInfiniteList({
+    fetchFn: (page, limit, sort) =>
+      api.get('/api/games', {
+        page,
+        limit,
+        sort: sort || undefined,
+        search: search.value || undefined,
+        platform: platform.value || undefined,
+        status: status.value || undefined,
+      }),
+    initialSort: 'created_at',
   });
-  if (res.success) {
-    games.value = res.data;
-    total.value = res.meta?.total ?? 0;
-  }
-  loading.value = false;
-}
+
 function clear() {
   search.value = '';
   platform.value = '';
   status.value = '';
-  page.value = 1;
+  reset();
 }
-watch([search, platform, status, page], () => fetch());
+
+watch([search, platform, status], () => reset());
+
 onMounted(async () => {
   if (!loaded.value) await load();
-  fetch();
+  fetch(true);
 });
 </script>
 
 <template>
   <div>
-    <div class="mb-6 flex items-center gap-3">
+    <div class="mb-4 flex items-center gap-3">
       <div class="flex-1"><SearchInput v-model="search" placeholder="搜索游戏..." /></div>
       <button
         class="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition-colors"
@@ -59,7 +62,7 @@ onMounted(async () => {
     </div>
     <div
       v-if="showFilters"
-      class="mb-6 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
+      class="mb-4 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
     >
       <div class="w-full sm:w-40">
         <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">平台</label
@@ -76,7 +79,25 @@ onMounted(async () => {
         <X class="h-4 w-4" />清除
       </button>
     </div>
-    <div v-if="loading && games.length === 0" class="flex justify-center py-16">
+
+    <!-- Sort pills -->
+    <div class="mb-4 flex flex-wrap gap-1.5">
+      <button
+        v-for="opt in sortOptions"
+        :key="opt.value"
+        class="rounded-full px-3 py-1 text-xs font-medium transition-colors"
+        :class="
+          sort === opt.value
+            ? 'bg-primary-600 text-white'
+            : 'bg-[var(--color-bg)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)]'
+        "
+        @click="setSort(opt.value)"
+      >
+        {{ opt.label }}
+      </button>
+    </div>
+
+    <div v-if="initialLoading" class="flex justify-center py-16">
       <div
         class="border-primary-600 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent"
       />
@@ -89,27 +110,17 @@ onMounted(async () => {
       action-label="添加游戏"
       @action="navigateTo('/games/add')"
     />
-    <div v-else class="space-y-3"><GameCard v-for="g in games" :key="g.id" :game="g" /></div>
+    <div v-else class="space-y-3">
+      <GameCard v-for="g in games" :key="g.id" :game="g" />
+    </div>
 
-    <!-- Pagination -->
-    <div v-if="totalPages > 1" class="mt-8 flex items-center justify-center gap-2">
-      <button
-        :disabled="page <= 1"
-        class="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm text-[var(--color-text)] transition-colors hover:bg-[var(--color-bg)] disabled:opacity-30"
-        @click="page--"
-      >
-        上一页
-      </button>
-      <span class="text-sm text-[var(--color-text-secondary)]">
-        {{ page }} / {{ totalPages }}
-      </span>
-      <button
-        :disabled="page >= totalPages"
-        class="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm text-[var(--color-text)] transition-colors hover:bg-[var(--color-bg)] disabled:opacity-30"
-        @click="page++"
-      >
-        下一页
-      </button>
+    <!-- Infinite scroll sentinel -->
+    <div ref="sentinel" class="flex justify-center py-8">
+      <div
+        v-if="loading"
+        class="border-primary-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"
+      />
+      <span v-else-if="!hasMore && games.length > 0" class="text-xs text-[var(--color-text-secondary)]">已加载全部</span>
     </div>
 
     <FabButton to="/games/add" />

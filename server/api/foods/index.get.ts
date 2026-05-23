@@ -37,7 +37,19 @@ export default defineEventHandler((event) => {
   const page = Math.max(1, Number(query.page) || 1);
   const limit = Math.min(50, Number(query.limit) || 20);
   const offset = (page - 1) * limit;
-  sql += ' ORDER BY visited_at DESC, created_at DESC LIMIT ? OFFSET ?';
+
+  const sort = String(query.sort || 'visited_at');
+  switch (sort) {
+    case 'rating':
+      sql += ' ORDER BY rating DESC NULLS LAST, created_at DESC';
+      break;
+    case 'created_at':
+      sql += ' ORDER BY created_at DESC';
+      break;
+    default:
+      sql += ' ORDER BY visited_at DESC, created_at DESC';
+  }
+  sql += ' LIMIT ? OFFSET ?';
   params.push(limit, offset);
 
   const foods = db.all(sql, ...params);

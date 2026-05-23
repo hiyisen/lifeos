@@ -1,51 +1,52 @@
 <script setup lang="ts">
 import { Wallet, Filter, X, Trash2 } from 'lucide-vue-next';
+
 const api = useApi();
 const { loaded, load, getLabel } = useDict();
-const expenses = ref<any[]>([]);
-const loading = ref(true);
-const total = ref(0);
-const page = ref(1);
-const limit = 30;
+
 const category = ref('');
 const type = ref('');
 const search = ref('');
 const showFilters = ref(false);
-const now = new Date();
-const summaryYear = ref(now.getFullYear());
-const summaryMonth = ref(now.getMonth() + 1);
+
+const sortOptions = [
+  { value: 'record_date', label: '记账日期' },
+  { value: 'amount_desc', label: '金额最大' },
+  { value: 'amount_asc', label: '金额最小' },
+  { value: 'created_at', label: '最近添加' },
+];
+
+const { items: expenses, loading, initialLoading, hasMore, sort, setSort, sentinel, fetch, reset } =
+  useInfiniteList({
+    fetchFn: (page, limit, sort) =>
+      api.get('/api/expenses', {
+        page,
+        limit,
+        sort: sort || undefined,
+        category: category.value || undefined,
+        type: type.value || undefined,
+        search: search.value || undefined,
+      }),
+    initialSort: 'record_date',
+  });
+
 const deleteTarget = ref<any>(null);
 const showDeleteConfirm = ref(false);
-
-async function fetch() {
-  loading.value = true;
-  const res = await api.get('/api/expenses', {
-    page: page.value,
-    limit,
-    category: category.value || undefined,
-    type: type.value || undefined,
-    search: search.value || undefined,
-  });
-  if (res.success) {
-    expenses.value = res.data;
-    total.value = res.meta?.total ?? 0;
-  }
-  loading.value = false;
-}
-
-const totalPages = computed(() => Math.ceil(total.value / limit));
 
 function clear() {
   category.value = '';
   type.value = '';
   search.value = '';
-  page.value = 1;
+  reset();
 }
 
 async function onDelete(id: number) {
   try {
     await api.del(`/api/expenses/${id}`);
-    expenses.value = expenses.value.filter((e) => e.id !== id);
+    (expenses.value as any[]).splice(
+      (expenses.value as any[]).findIndex((e) => e.id === id),
+      1,
+    );
     useToast().success('记录已删除');
   } catch {
     useToast().error('删除失败，请重试');
@@ -54,18 +55,19 @@ async function onDelete(id: number) {
   }
 }
 
-watch([category, type, search, page], () => fetch());
+watch([category, type, search], () => reset());
+
 onMounted(async () => {
   if (!loaded.value) await load();
-  fetch();
+  fetch(true);
 });
 </script>
 
 <template>
   <div>
-    <MonthlySummary :year="summaryYear" :month="summaryMonth" class="mb-6" />
+    <MonthlySummary :year="new Date().getFullYear()" :month="new Date().getMonth() + 1" class="mb-6" />
 
-    <div class="mb-6 flex items-center gap-3">
+    <div class="mb-4 flex items-center gap-3">
       <div class="flex-1"><SearchInput v-model="search" placeholder="搜索备注..." /></div>
       <button
         class="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition-colors"
@@ -81,7 +83,7 @@ onMounted(async () => {
     </div>
     <div
       v-if="showFilters"
-      class="mb-6 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
+      class="mb-4 flex flex-wrap items-end gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4"
     >
       <div class="w-full sm:w-40">
         <label class="mb-1 block text-xs font-medium text-[var(--color-text-secondary)]">分类</label
@@ -111,7 +113,24 @@ onMounted(async () => {
       </button>
     </div>
 
-    <div v-if="loading && expenses.length === 0" class="flex justify-center py-16">
+    <!-- Sort pills -->
+    <div class="mb-4 flex flex-wrap gap-1.5">
+      <button
+        v-for="opt in sortOptions"
+        :key="opt.value"
+        class="rounded-full px-3 py-1 text-xs font-medium transition-colors"
+        :class="
+          sort === opt.value
+            ? 'bg-primary-600 text-white'
+            : 'bg-[var(--color-bg)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)]'
+        "
+        @click="setSort(opt.value)"
+      >
+        {{ opt.label }}
+      </button>
+    </div>
+
+    <div v-if="initialLoading" class="flex justify-center py-16">
       <div
         class="border-primary-600 h-8 w-8 animate-spin rounded-full border-2 border-t-transparent"
       />
@@ -171,25 +190,13 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- Pagination -->
-      <div v-if="totalPages > 1" class="flex items-center justify-center gap-2 pt-4">
-        <button
-          :disabled="page <= 1"
-          class="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm text-[var(--color-text-secondary)] disabled:opacity-40"
-          @click="page--"
-        >
-          上一页
-        </button>
-        <span class="text-sm text-[var(--color-text-secondary)]"
-          >{{ page }} / {{ totalPages }}</span
-        >
-        <button
-          :disabled="page >= totalPages"
-          class="rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm text-[var(--color-text-secondary)] disabled:opacity-40"
-          @click="page++"
-        >
-          下一页
-        </button>
+      <!-- Infinite scroll sentinel -->
+      <div ref="sentinel" class="flex justify-center py-8">
+        <div
+          v-if="loading"
+          class="border-primary-600 h-6 w-6 animate-spin rounded-full border-2 border-t-transparent"
+        />
+        <span v-else-if="!hasMore && expenses.length > 0" class="text-xs text-[var(--color-text-secondary)]">已加载全部</span>
       </div>
     </div>
 

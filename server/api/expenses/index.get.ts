@@ -46,7 +46,22 @@ export default defineEventHandler((event) => {
   // 处理分页参数，设置默认值和边界限制
   const page = Math.max(1, Number(query.page) || 1);
   const limit = Math.min(50, Number(query.limit) || 20);
-  sql += ' ORDER BY record_date DESC, created_at DESC LIMIT ? OFFSET ?';
+
+  const sort = String(query.sort || 'record_date');
+  switch (sort) {
+    case 'amount_desc':
+      sql += ' ORDER BY amount DESC, created_at DESC';
+      break;
+    case 'amount_asc':
+      sql += ' ORDER BY amount ASC, created_at DESC';
+      break;
+    case 'created_at':
+      sql += ' ORDER BY created_at DESC';
+      break;
+    default:
+      sql += ' ORDER BY record_date DESC, created_at DESC';
+  }
+  sql += ' LIMIT ? OFFSET ?';
   params.push(limit, (page - 1) * limit);
 
   // 返回包含数据、分页信息的成功响应

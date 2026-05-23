@@ -34,7 +34,19 @@ export default defineEventHandler((event) => {
   ) ?? { total: 0 };
   const page = Math.max(1, Number(query.page) || 1);
   const limit = Math.min(50, Number(query.limit) || 20);
-  sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+
+  const sort = String(query.sort || 'created_at');
+  switch (sort) {
+    case 'rating':
+      sql += ' ORDER BY rating DESC NULLS LAST, created_at DESC';
+      break;
+    case 'play_hours':
+      sql += ' ORDER BY play_hours DESC, created_at DESC';
+      break;
+    default:
+      sql += ' ORDER BY created_at DESC';
+  }
+  sql += ' LIMIT ? OFFSET ?';
   params.push(limit, (page - 1) * limit);
 
   return { success: true, data: db.all(sql, ...params), meta: { total, page, pageSize: limit } };
