@@ -7,6 +7,7 @@ const isMobile = useMediaQuery('(max-width: 767px)');
 
 const pageTitles: Record<string, string> = {
   '/': '首页',
+  '/timeline': '时间轴',
   '/foods': '美食记录',
   '/foods/add': '添加美食',
   '/media': '媒体库',

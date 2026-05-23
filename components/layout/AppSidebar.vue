@@ -8,12 +8,14 @@ import {
   Wallet,
   CheckSquare,
   BarChart3,
+  Clock,
 } from 'lucide-vue-next';
 
 const route = useRoute();
 
 const navItems = [
   { label: '首页', icon: LayoutDashboard, to: '/' },
+  { label: '时间轴', icon: Clock, to: '/timeline' },
   { label: '美食', icon: UtensilsCrossed, to: '/foods' },
   { label: '媒体', icon: Film, to: '/media' },
   { label: '游戏', icon: Gamepad2, to: '/games' },
